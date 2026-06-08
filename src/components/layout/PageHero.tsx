@@ -6,7 +6,7 @@ interface PageHeroProps {
 
 export function PageHero({ title, subtitle, description }: PageHeroProps) {
   return (
-    <section className="relative pt-32 pb-20 bg-black-light section-pattern overflow-hidden">
+    <section className="relative pt-24 sm:pt-32 pb-14 sm:pb-20 bg-black-light section-pattern overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {subtitle && (
@@ -14,7 +14,7 @@ export function PageHero({ title, subtitle, description }: PageHeroProps) {
             {subtitle}
           </p>
         )}
-        <h1 className="text-4xl md:text-5xl font-bold gold-text-gradient mb-6">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold gold-text-gradient mb-6 px-2">
           {title}
         </h1>
         <div className="divider-gold w-24 mx-auto mb-6" />

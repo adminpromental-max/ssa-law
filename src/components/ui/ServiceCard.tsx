@@ -37,7 +37,7 @@ export function ServiceCard({
   return (
     <Link
       href={`/services/${slug}`}
-      className="group block bg-black-light border border-gold/10 rounded-sm p-8 hover:border-gold/40 hover:gold-glow transition-all duration-300"
+      className="group block bg-black-light border border-gold/10 rounded-sm p-6 sm:p-8 hover:border-gold/40 hover:gold-glow transition-all duration-300"
     >
       <div className="w-14 h-14 rounded-sm bg-gold/10 flex items-center justify-center mb-6 group-hover:bg-gold/20 transition-colors">
         <Icon className="w-7 h-7 text-gold" />

@@ -22,33 +22,33 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center bg-black section-pattern overflow-hidden">
+      <section className="relative min-h-[100dvh] flex items-center bg-black section-pattern overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-bl from-gold/10 via-transparent to-transparent" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+        <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-72 md:w-96 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-20 w-full">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 rounded-sm px-4 py-2 mb-8">
-              <Award className="w-4 h-4 text-gold" />
-              <span className="text-gold text-sm">
+            <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 rounded-sm px-3 sm:px-4 py-2 mb-6 sm:mb-8 max-w-full">
+              <Award className="w-4 h-4 text-gold shrink-0" />
+              <span className="text-gold text-xs sm:text-sm">
                 شركة مهنية · ترخيص {siteConfig.license}
               </span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight mb-6 break-words">
               <span className="text-cream">{siteConfig.name}</span>
               <br />
               <span className="gold-text-gradient">
                 للمحاماة والاستشارات القانونية
               </span>
             </h1>
-            <p className="text-cream/70 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl">
+            <p className="text-cream/70 text-base sm:text-lg md:text-xl leading-relaxed mb-8 sm:mb-10 max-w-2xl">
               خبرة قانونية متميزة في جميع المجالات — من الاستشارات والعقود إلى
               التحكيم والتوثيق. نضمن لكم أفضل الخدمات القانونية بسرية وفعالية.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Button href="/book" size="lg">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <Button href="/book" size="lg" className="w-full sm:w-auto">
                 احجز استشارة
               </Button>
-              <Button href="/services" variant="outline" size="lg">
+              <Button href="/services" variant="outline" size="lg" className="w-full sm:w-auto">
                 استكشف خدماتنا
               </Button>
             </div>
@@ -57,9 +57,9 @@ export default function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="py-16 bg-black-light border-y border-gold/10">
+      <section className="py-12 sm:py-16 bg-black-light border-y border-gold/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <p className="text-3xl md:text-4xl font-bold gold-text-gradient mb-2">
@@ -73,7 +73,7 @@ export default function HomePage() {
       </section>
 
       {/* About snippet */}
-      <section className="py-24 bg-black">
+      <section className="py-16 sm:py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
@@ -97,7 +97,7 @@ export default function HomePage() {
                 <ArrowLeft className="w-4 h-4 mr-2" />
               </Button>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {values.map((v) => (
                 <div
                   key={v.title}
@@ -114,7 +114,7 @@ export default function HomePage() {
       </section>
 
       {/* Services */}
-      <section className="py-24 bg-black-light section-pattern">
+      <section className="py-16 sm:py-24 bg-black-light section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="خدماتنا"
@@ -135,7 +135,7 @@ export default function HomePage() {
       </section>
 
       {/* Clients */}
-      <section className="py-24 bg-black">
+      <section className="py-16 sm:py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="ثقة عملائنا"
@@ -160,14 +160,14 @@ export default function HomePage() {
       </section>
 
       {/* Team preview */}
-      <section className="py-24 bg-black-light">
+      <section className="py-16 sm:py-24 bg-black-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="فريق العمل"
             title="خبراء قانونيون مؤهلون"
             description="فريق عمل مؤهل بخبرة كبيرة في مجال القانون بشتى مجالاته"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {leadMember && <TeamCard member={leadMember} />}
             {otherMembers.map((member) => (
               <TeamCard key={member.id} member={member} />
@@ -207,7 +207,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-black-light">
+      <section className="py-16 sm:py-24 bg-black-light">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold gold-text-gradient mb-6">
             هل تحتاج استشارة قانونية؟

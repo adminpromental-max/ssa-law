@@ -11,7 +11,7 @@ export function TeamCard({ member }: TeamCardProps) {
     <div
       className={`bg-black-light border rounded-sm overflow-hidden transition-all duration-300 hover:gold-glow ${
         member.isLead
-          ? "border-gold/40 md:col-span-2"
+          ? "border-gold/40 lg:col-span-2"
           : "border-gold/10 hover:border-gold/30"
       }`}
     >

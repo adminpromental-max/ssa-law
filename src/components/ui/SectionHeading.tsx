@@ -16,14 +16,14 @@ export function SectionHeading({
   const alignClass = align === "center" ? "text-center mx-auto" : "text-right";
 
   return (
-    <div className={`max-w-3xl mb-12 ${alignClass}`}>
+    <div className={`max-w-3xl mb-8 sm:mb-12 ${alignClass}`}>
       {subtitle && (
         <p className="text-gold text-sm font-medium tracking-widest uppercase mb-3">
           {subtitle}
         </p>
       )}
       <h2
-        className={`text-3xl md:text-4xl font-bold mb-4 ${light ? "text-cream" : "gold-text-gradient"}`}
+        className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 ${light ? "text-cream" : "gold-text-gradient"}`}
       >
         {title}
       </h2>

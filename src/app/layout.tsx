@@ -12,6 +12,12 @@ const tajawal = Tajawal({
   variable: "--font-tajawal",
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0a0a0a",
+};
+
 export const metadata: Metadata = {
   title: {
     default: `${siteConfig.name} | للمحاماة والاستشارات القانونية`,

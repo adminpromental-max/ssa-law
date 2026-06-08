@@ -24,7 +24,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative min-h-[100dvh] flex items-center bg-black section-pattern overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-bl from-gold/10 via-transparent to-transparent" />
-        <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-72 md:w-96 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="hidden md:block absolute top-1/4 left-1/4 w-72 md:w-96 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-20 w-full">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 rounded-sm px-3 sm:px-4 py-2 mb-6 sm:mb-8 max-w-full">

@@ -9,10 +9,10 @@ interface TeamCardProps {
 export function TeamCard({ member }: TeamCardProps) {
   return (
     <div
-      className={`bg-black-light border rounded-sm overflow-hidden transition-all duration-300 hover:gold-glow ${
+      className={`card-surface bg-black-light border rounded-sm overflow-hidden transition-[border-color,box-shadow] duration-300 md:hover:gold-glow ${
         member.isLead
           ? "border-gold/40 lg:col-span-2"
-          : "border-gold/10 hover:border-gold/30"
+          : "border-gold/10 md:hover:border-gold/30"
       }`}
     >
       <div

@@ -54,16 +54,31 @@ body {
 }
 
 .gold-glow {
-  box-shadow: 0 0 40px rgba(201, 162, 39, 0.15);
+  box-shadow: none;
 }
 
-.section-pattern {
-  background-image: radial-gradient(
-    circle at 1px 1px,
-    rgba(201, 162, 39, 0.05) 1px,
-    transparent 0
-  );
-  background-size: 40px 40px;
+@media (hover: hover) and (min-width: 768px) {
+  .gold-glow {
+    box-shadow: 0 0 40px rgba(201, 162, 39, 0.15);
+  }
+}
+
+@media (min-width: 768px) {
+  .section-pattern {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(201, 162, 39, 0.05) 1px,
+      transparent 0
+    );
+    background-size: 40px 40px;
+  }
+}
+
+.card-surface {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  isolation: isolate;
 }
 
 .divider-gold {

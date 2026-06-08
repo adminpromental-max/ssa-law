@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   ArrowLeft,
   Shield,
@@ -8,6 +7,7 @@ import {
   Phone,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { HeroNamePlate } from "@/components/ui/HeroNamePlate";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { TeamCard } from "@/components/ui/TeamCard";
@@ -27,41 +27,27 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-bl from-gold/10 via-transparent to-transparent" />
         <div className="hidden md:block absolute top-1/4 left-1/4 w-72 md:w-96 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-20 w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-            <div className="w-full lg:w-auto lg:flex-1 flex justify-center lg:justify-end order-1 lg:order-2 pr-0 lg:pr-6">
-              <Image
-                src="/images/name-plate.png"
-                alt="مكتب صالح بن سلمان العمري للمحاماة والاستشارات القانونية"
-                width={1075}
-                height={565}
-                priority
-                className="w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] h-auto object-contain"
-              />
+          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 lg:gap-14">
+            <div className="w-full lg:flex-1 lg:max-w-2xl order-1 text-center lg:text-right lg:pr-4">
+              <HeroNamePlate />
             </div>
 
-            <div className="w-full lg:max-w-md xl:max-w-lg order-2 lg:order-1 text-right mr-0 lg:mr-4">
+            <div className="w-full lg:max-w-sm xl:max-w-md order-2 text-center lg:text-right lg:pt-6">
               <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 rounded-sm px-3 py-1.5 mb-5 max-w-full">
                 <Award className="w-3.5 h-3.5 text-gold shrink-0" />
                 <span className="text-gold text-xs">
                   شركة مهنية · ترخيص {siteConfig.license}
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-snug mb-4 break-words">
-                <span className="text-cream">{siteConfig.name}</span>
-                <br />
-                <span className="gold-text-gradient text-xl sm:text-2xl lg:text-3xl">
-                  للمحاماة والاستشارات القانونية والتوثيق
-                </span>
-              </h1>
-              <p className="text-cream/70 text-sm sm:text-base leading-relaxed mb-7 max-w-md mr-0 lg:mr-2">
+              <p className="text-cream/70 text-sm sm:text-base leading-relaxed mb-7">
                 خبرة قانونية متميزة في جميع المجالات — من الاستشارات والعقود إلى
                 التحكيم والتوثيق. نضمن لكم أفضل الخدمات القانونية بسرية وفعالية.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 mr-0 lg:mr-2">
-                <Button href="/book" size="md" className="w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3 justify-center lg:justify-start">
+                <Button href="/book" size="md" className="w-full sm:w-auto lg:w-full xl:w-auto">
                   احجز استشارة
                 </Button>
-                <Button href="/services" variant="outline" size="md" className="w-full sm:w-auto">
+                <Button href="/services" variant="outline" size="md" className="w-full sm:w-auto lg:w-full xl:w-auto">
                   استكشف خدماتنا
                 </Button>
               </div>

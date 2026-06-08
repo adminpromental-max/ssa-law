@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   ArrowLeft,
   Shield,
@@ -26,31 +27,44 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-bl from-gold/10 via-transparent to-transparent" />
         <div className="hidden md:block absolute top-1/4 left-1/4 w-72 md:w-96 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-20 w-full">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 rounded-sm px-3 sm:px-4 py-2 mb-6 sm:mb-8 max-w-full">
-              <Award className="w-4 h-4 text-gold shrink-0" />
-              <span className="text-gold text-xs sm:text-sm">
-                شركة مهنية · ترخيص {siteConfig.license}
-              </span>
+          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+            <div className="w-full lg:w-auto lg:flex-1 flex justify-center lg:justify-end order-1 lg:order-2 pr-0 lg:pr-6">
+              <Image
+                src="/images/name-plate.png"
+                alt="مكتب صالح بن سلمان العمري للمحاماة والاستشارات القانونية"
+                width={1075}
+                height={565}
+                priority
+                className="w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[420px] h-auto object-contain"
+              />
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight mb-6 break-words">
-              <span className="text-cream">{siteConfig.name}</span>
-              <br />
-              <span className="gold-text-gradient">
-                للمحاماة والاستشارات القانونية
-              </span>
-            </h1>
-            <p className="text-cream/70 text-base sm:text-lg md:text-xl leading-relaxed mb-8 sm:mb-10 max-w-2xl">
-              خبرة قانونية متميزة في جميع المجالات — من الاستشارات والعقود إلى
-              التحكيم والتوثيق. نضمن لكم أفضل الخدمات القانونية بسرية وفعالية.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Button href="/book" size="lg" className="w-full sm:w-auto">
-                احجز استشارة
-              </Button>
-              <Button href="/services" variant="outline" size="lg" className="w-full sm:w-auto">
-                استكشف خدماتنا
-              </Button>
+
+            <div className="w-full lg:max-w-md xl:max-w-lg order-2 lg:order-1 text-right mr-0 lg:mr-4">
+              <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 rounded-sm px-3 py-1.5 mb-5 max-w-full">
+                <Award className="w-3.5 h-3.5 text-gold shrink-0" />
+                <span className="text-gold text-xs">
+                  شركة مهنية · ترخيص {siteConfig.license}
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-snug mb-4 break-words">
+                <span className="text-cream">{siteConfig.name}</span>
+                <br />
+                <span className="gold-text-gradient text-xl sm:text-2xl lg:text-3xl">
+                  للمحاماة والاستشارات القانونية والتوثيق
+                </span>
+              </h1>
+              <p className="text-cream/70 text-sm sm:text-base leading-relaxed mb-7 max-w-md mr-0 lg:mr-2">
+                خبرة قانونية متميزة في جميع المجالات — من الاستشارات والعقود إلى
+                التحكيم والتوثيق. نضمن لكم أفضل الخدمات القانونية بسرية وفعالية.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 mr-0 lg:mr-2">
+                <Button href="/book" size="md" className="w-full sm:w-auto">
+                  احجز استشارة
+                </Button>
+                <Button href="/services" variant="outline" size="md" className="w-full sm:w-auto">
+                  استكشف خدماتنا
+                </Button>
+              </div>
             </div>
           </div>
         </div>

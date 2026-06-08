@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { navLinks, siteConfig } from "@/data/site";
 import { Button } from "@/components/ui/Button";
+import { Logo } from "@/components/ui/Logo";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -21,23 +22,7 @@ export function Header() {
       <header className="fixed top-0 right-0 left-0 z-50 bg-black md:bg-black/95 md:backdrop-blur-md border-b border-gold/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
-            <Link
-              href="/"
-              className="flex items-center gap-3 group min-w-0"
-              onClick={() => setOpen(false)}
-            >
-              <div className="w-10 h-10 shrink-0 rounded-sm gold-gradient flex items-center justify-center">
-                <span className="text-black font-bold text-lg">ص</span>
-              </div>
-              <div className="hidden sm:block min-w-0">
-                <p className="text-cream font-bold text-sm leading-tight group-hover:text-gold transition-colors truncate">
-                  {siteConfig.name}
-                </p>
-                <p className="text-gold/60 text-xs truncate">
-                  للمحاماة والاستشارات القانونية
-                </p>
-              </div>
-            </Link>
+            <Logo onClick={() => setOpen(false)} />
 
             <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (

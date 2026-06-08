@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Tajawal } from "next/font/google";
+import localFont from "next/font/local";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { siteConfig } from "@/data/site";
 import "./globals.css";
 
-const tajawal = Tajawal({
-  subsets: ["arabic"],
-  weight: ["300", "400", "500", "700", "800"],
-  variable: "--font-tajawal",
+const sakkalMajalla = localFont({
+  src: "../../public/fonts/sakkal-majalla.woff",
+  variable: "--font-sakkal",
+  display: "swap",
+  weight: "400",
 });
 
 export const viewport = {
@@ -41,7 +42,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={`${tajawal.variable} antialiased`}>
+      <body className={`${sakkalMajalla.variable} antialiased`}>
         <Header />
         <main>{children}</main>
         <Footer />

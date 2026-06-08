@@ -9,7 +9,7 @@
   --color-black-muted: #2a2a2a;
   --color-cream: #f5f0e8;
   --color-cream-muted: #e8e0d0;
-  --font-sans: var(--font-tajawal), system-ui, sans-serif;
+  --font-sans: var(--font-sakkal), "Sakkal Majalla", "Traditional Arabic", serif;
 }
 
 html {

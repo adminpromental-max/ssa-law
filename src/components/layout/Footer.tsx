@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Printer } from "lucide-react";
 import { navLinks, siteConfig } from "@/data/site";
+import { Logo } from "@/components/ui/Logo";
 
 export function Footer() {
   return (
@@ -8,14 +9,9 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-sm gold-gradient flex items-center justify-center">
-                <span className="text-black font-bold text-lg">ص</span>
-              </div>
-              <div>
-                <p className="text-cream font-bold text-sm">{siteConfig.name}</p>
-                <p className="text-gold/60 text-xs">شركة مهنية</p>
-              </div>
+            <div className="mb-6">
+              <Logo size="sm" />
+              <p className="text-gold/60 text-xs mt-3">شركة مهنية</p>
             </div>
             <p className="text-cream/50 text-sm leading-relaxed">
               {siteConfig.description}

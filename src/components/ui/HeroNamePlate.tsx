@@ -1,24 +1,16 @@
+import Image from "next/image";
+
 export function HeroNamePlate() {
   return (
-    <h1 className="space-y-2 sm:space-y-3 text-center lg:text-right">
-      <span className="block text-cream text-[1.65rem] sm:text-3xl lg:text-[2.35rem] font-bold leading-[1.45] tracking-wide">
-        مكتب صالح بن سلمان العمري
-      </span>
-      <span
-        className="block text-gold text-base sm:text-lg lg:text-xl tracking-[0.12em] uppercase"
-        dir="ltr"
-      >
-        Saleh Bin Salman Al Amri Office
-      </span>
-      <span className="block text-cream text-lg sm:text-xl lg:text-2xl font-medium leading-relaxed">
-        للمحاماة والاستشارات القانونية
-      </span>
-      <span
-        className="block text-gold/90 text-xs sm:text-sm lg:text-base tracking-[0.08em]"
-        dir="ltr"
-      >
-        Law Firm, Legal Consult. And Notaries
-      </span>
+    <h1 className="m-0">
+      <Image
+        src="/images/name-plate-hero.png"
+        alt="مكتب صالح بن سلمان العمري للمحاماة والاستشارات القانونية والتوثيق"
+        width={1075}
+        height={565}
+        priority
+        className="w-full max-w-[300px] sm:max-w-[380px] lg:max-w-[480px] xl:max-w-[540px] h-auto object-contain mx-auto lg:mx-0 lg:mr-auto"
+      />
     </h1>
   );
 }

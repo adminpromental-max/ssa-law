@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Cairo } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { siteConfig } from "@/data/site";
 import "./globals.css";
 
-const sakkalMajalla = localFont({
-  src: "../../public/fonts/sakkal-majalla.woff",
-  variable: "--font-sakkal",
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-cairo",
   display: "swap",
-  weight: "400",
 });
 
 export const viewport = {
@@ -42,7 +42,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={`${sakkalMajalla.variable} antialiased`}>
+      <body className={`${cairo.variable} antialiased`}>
         <Header />
         <main>{children}</main>
         <Footer />

@@ -23,23 +23,24 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-[100dvh] flex items-center bg-black section-pattern overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-bl from-gold/10 via-transparent to-transparent" />
-        <div className="hidden md:block absolute top-1/4 left-1/4 w-72 md:w-96 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative min-h-[100dvh] flex items-center bg-[#f7f3eb] overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-bl from-gold/8 via-transparent to-[#efe8da]/80" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gold/20" />
+        <div className="hidden md:block absolute bottom-10 left-10 w-64 h-64 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-20 w-full">
-          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 lg:gap-14">
-            <div className="w-full lg:flex-1 lg:max-w-2xl order-1 text-center lg:text-right lg:pr-4">
+          <div className="flex flex-col lg:flex-row items-center lg:items-center gap-10 lg:gap-16">
+            <div className="w-full lg:flex-1 flex justify-center lg:justify-end order-1 lg:order-2 lg:pr-2">
               <HeroNamePlate />
             </div>
 
-            <div className="w-full lg:max-w-sm xl:max-w-md order-2 text-center lg:text-right lg:pt-6">
-              <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/20 rounded-sm px-3 py-1.5 mb-5 max-w-full">
-                <Award className="w-3.5 h-3.5 text-gold shrink-0" />
-                <span className="text-gold text-xs">
+            <div className="w-full lg:max-w-sm xl:max-w-md order-2 lg:order-1 text-center lg:text-right">
+              <div className="inline-flex items-center gap-2 bg-white/70 border border-gold/25 rounded-sm px-3 py-1.5 mb-5 shadow-sm">
+                <Award className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+                <span className="text-gold-dark text-xs font-medium">
                   شركة مهنية · ترخيص {siteConfig.license}
                 </span>
               </div>
-              <p className="text-cream/70 text-sm sm:text-base leading-relaxed mb-7">
+              <p className="text-black/65 text-sm sm:text-base leading-relaxed mb-7">
                 خبرة قانونية متميزة في جميع المجالات — من الاستشارات والعقود إلى
                 التحكيم والتوثيق. نضمن لكم أفضل الخدمات القانونية بسرية وفعالية.
               </p>

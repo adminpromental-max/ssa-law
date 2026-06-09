@@ -1,72 +1,61 @@
-import { readDb, hasBlobStorage, testBlobStorage } from "@/lib/db";
+import { readDb } from "@/lib/db";
+import { createSeedDatabase } from "@/lib/db/seed";
+import { StorageBanner } from "@/components/admin/StorageBanner";
 import { Eye, Mail, CalendarCheck, Inbox } from "lucide-react";
 
 export default async function AdminDashboardPage() {
-  const hasBlob = hasBlobStorage();
-  const storageTest = hasBlob ? await testBlobStorage() : null;
-  const db = await readDb();
-  const unreadContact = db.contactSubmissions.filter((s) => !s.read).length;
-  const unreadBooking = db.bookingSubmissions.filter((s) => !s.read).length;
+  let db;
+  try {
+    db = await readDb();
+  } catch {
+    db = createSeedDatabase();
+  }
+
+  const unreadContact = (db.contactSubmissions ?? []).filter((s) => !s.read)
+    .length;
+  const unreadBooking = (db.bookingSubmissions ?? []).filter((s) => !s.read)
+    .length;
 
   const stats = [
     {
       label: "عدد الزوار",
-      value: db.visitorCount.toLocaleString("ar-SA"),
+      value: (db.visitorCount ?? 500).toLocaleString("ar-SA"),
       icon: Eye,
       color: "text-gold",
     },
     {
       label: "طلبات التواصل",
-      value: db.contactSubmissions.length,
+      value: (db.contactSubmissions ?? []).length,
       sub: unreadContact > 0 ? `${unreadContact} جديد` : undefined,
       icon: Mail,
       color: "text-blue-400",
     },
     {
       label: "طلبات الحجز",
-      value: db.bookingSubmissions.length,
+      value: (db.bookingSubmissions ?? []).length,
       sub: unreadBooking > 0 ? `${unreadBooking} جديد` : undefined,
       icon: CalendarCheck,
       color: "text-emerald-400",
     },
     {
       label: "إجمالي الطلبات",
-      value: db.contactSubmissions.length + db.bookingSubmissions.length,
+      value:
+        (db.contactSubmissions ?? []).length +
+        (db.bookingSubmissions ?? []).length,
       icon: Inbox,
       color: "text-cream",
     },
   ];
 
-  const recentContact = db.contactSubmissions.slice(0, 5);
-  const recentBooking = db.bookingSubmissions.slice(0, 5);
+  const recentContact = (db.contactSubmissions ?? []).slice(0, 5);
+  const recentBooking = (db.bookingSubmissions ?? []).slice(0, 5);
 
   return (
     <div>
       <h1 className="text-2xl font-bold text-cream mb-2">لوحة التحكم</h1>
       <p className="text-cream/50 text-sm mb-4">نظرة عامة على الموقع والطلبات</p>
 
-      {!hasBlob && (
-        <div className="mb-8 p-4 rounded-sm border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm leading-relaxed">
-          <strong className="text-amber-100">تنبيه:</strong> التخزين الدائم غير مفعّل.
-          من Vercel → Storage → اربطي Blob Store بالمشروع، ثم أعيدي النشر.
-        </div>
-      )}
-
-      {storageTest && !storageTest.ok && (
-        <div className="mb-8 p-4 rounded-sm border border-red-500/40 bg-red-500/10 text-red-200 text-sm leading-relaxed">
-          <strong className="text-red-100">خطأ تخزين:</strong>{" "}
-          {storageTest.error || "فشل القراءة/الكتابة على Blob."}
-          <br />
-          من Vercel → Storage → Projects → فعّلي ✓ على Production و Preview
-          لـ BLOB_READ_WRITE_TOKEN ثم Redeploy.
-        </div>
-      )}
-
-      {storageTest?.ok && (
-        <div className="mb-8 p-4 rounded-sm border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-sm">
-          ✓ التخزين الدائم يعمل — التعديلات تُحفظ على الموقع.
-        </div>
-      )}
+      <StorageBanner />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
         {stats.map((stat) => {

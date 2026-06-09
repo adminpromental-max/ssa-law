@@ -14,8 +14,12 @@ function getPassword(): string {
 
 export function verifyPassword(password: string): boolean {
   const expected = getPassword();
-  if (password.length !== expected.length) return false;
-  return crypto.timingSafeEqual(Buffer.from(password), Buffer.from(expected));
+  try {
+    if (password.length !== expected.length) return false;
+    return crypto.timingSafeEqual(Buffer.from(password), Buffer.from(expected));
+  } catch {
+    return false;
+  }
 }
 
 export function createSessionToken(): string {

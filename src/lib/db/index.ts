@@ -6,16 +6,15 @@ import type { Database } from "./types";
 
 const BLOB_PATHNAME = "ssa-law/database.json";
 
-export function isRemoteStorage(): boolean {
+export function canUseBlob(): boolean {
   return Boolean(
-    process.env.VERCEL ||
-      process.env.BLOB_READ_WRITE_TOKEN ||
-      process.env.BLOB_STORE_ID
+    process.env.BLOB_READ_WRITE_TOKEN ||
+      (process.env.BLOB_STORE_ID && process.env.VERCEL)
   );
 }
 
 export function hasBlobStorage(): boolean {
-  return isRemoteStorage();
+  return canUseBlob();
 }
 
 function getBlobOptions() {
@@ -38,22 +37,41 @@ function getSeedPath(): string {
   return path.join(process.cwd(), "data", "database.seed.json");
 }
 
+function normalizeDb(data: Database): Database {
+  return {
+    team: data.team ?? createSeedDatabase().team,
+    services: data.services ?? createSeedDatabase().services,
+    importantLinks: data.importantLinks ?? [],
+    contactSubmissions: data.contactSubmissions ?? [],
+    bookingSubmissions: data.bookingSubmissions ?? [],
+    visitorCount: data.visitorCount ?? 500,
+  };
+}
+
 async function readLocalFile(): Promise<Database | null> {
   try {
     const raw = await fs.readFile(getLocalDbPath(), "utf-8");
-    return JSON.parse(raw) as Database;
+    return normalizeDb(JSON.parse(raw) as Database);
   } catch {
     return null;
   }
 }
 
-async function writeLocalFile(data: Database): Promise<void> {
-  const dbPath = getLocalDbPath();
-  await fs.mkdir(path.dirname(dbPath), { recursive: true });
-  await fs.writeFile(dbPath, JSON.stringify(data, null, 2), "utf-8");
+async function writeLocalFile(data: Database): Promise<boolean> {
+  try {
+    const dbPath = getLocalDbPath();
+    await fs.mkdir(path.dirname(dbPath), { recursive: true });
+    await fs.writeFile(dbPath, JSON.stringify(data, null, 2), "utf-8");
+    return true;
+  } catch (error) {
+    console.error("[db] local write failed:", error);
+    return false;
+  }
 }
 
 async function readFromBlob(): Promise<Database | null> {
+  if (!canUseBlob()) return null;
+
   try {
     const result = await get(BLOB_PATHNAME, {
       access: "public",
@@ -65,73 +83,72 @@ async function readFromBlob(): Promise<Database | null> {
     }
 
     const text = await new Response(result.stream).text();
-    return JSON.parse(text) as Database;
+    return normalizeDb(JSON.parse(text) as Database);
   } catch (error) {
     if (error instanceof BlobNotFoundError) return null;
-    console.error("[db] Blob read failed:", error);
+    console.error("[db] blob read failed:", error);
     return null;
   }
 }
 
-async function writeToBlob(data: Database): Promise<void> {
-  await put(BLOB_PATHNAME, JSON.stringify(data, null, 2), {
-    access: "public",
-    addRandomSuffix: false,
-    allowOverwrite: true,
-    contentType: "application/json",
-    ...getBlobOptions(),
-  });
+async function writeToBlob(data: Database): Promise<boolean> {
+  if (!canUseBlob()) return false;
+
+  try {
+    await put(BLOB_PATHNAME, JSON.stringify(data, null, 2), {
+      access: "public",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType: "application/json",
+      ...getBlobOptions(),
+    });
+    return true;
+  } catch (error) {
+    console.error("[db] blob write failed:", error);
+    return false;
+  }
 }
 
 async function seedDatabase(): Promise<Database> {
   try {
     const raw = await fs.readFile(getSeedPath(), "utf-8");
     const parsed = JSON.parse(raw) as Database;
-    if (parsed.team && parsed.importantLinks) return parsed;
+    if (parsed.team && parsed.importantLinks) return normalizeDb(parsed);
   } catch {
     // use code seed
   }
   return createSeedDatabase();
 }
 
-let initPromise: Promise<void> | null = null;
-
-async function ensureRemoteDbInitialized(): Promise<Database> {
-  const seeded = await seedDatabase();
-  await writeToBlob(seeded);
-  return seeded;
+async function safePersist(data: Database): Promise<void> {
+  const blobOk = await writeToBlob(data);
+  if (blobOk) return;
+  await writeLocalFile(data);
 }
 
 export async function readDb(): Promise<Database> {
-  if (isRemoteStorage()) {
+  try {
     const fromBlob = await readFromBlob();
     if (fromBlob) return fromBlob;
 
-    if (!initPromise) {
-      initPromise = ensureRemoteDbInitialized().then(() => undefined);
-    }
-    await initPromise;
+    const fromLocal = await readLocalFile();
+    if (fromLocal) return fromLocal;
 
-    const afterInit = await readFromBlob();
-    if (afterInit) return afterInit;
-
-    return seedDatabase();
+    const seeded = await seedDatabase();
+    await safePersist(seeded);
+    return seeded;
+  } catch (error) {
+    console.error("[db] readDb error:", error);
+    return createSeedDatabase();
   }
-
-  const fromLocal = await readLocalFile();
-  if (fromLocal) return fromLocal;
-
-  const seeded = await seedDatabase();
-  await writeLocalFile(seeded);
-  return seeded;
 }
 
 export async function writeDb(data: Database): Promise<void> {
-  if (isRemoteStorage()) {
-    await writeToBlob(data);
-    return;
+  const normalized = normalizeDb(data);
+  const blobOk = await writeToBlob(normalized);
+  if (!blobOk) {
+    await writeLocalFile(normalized);
   }
-  await writeLocalFile(data);
 }
 
 export async function updateDb(
@@ -139,7 +156,7 @@ export async function updateDb(
 ): Promise<Database> {
   const db = await readDb();
   const result = updater(db);
-  const updated = (result ?? db) as Database;
+  const updated = normalizeDb((result ?? db) as Database);
   await writeDb(updated);
   return updated;
 }
@@ -150,18 +167,31 @@ export async function testBlobStorage(): Promise<{
   canWrite: boolean;
   error?: string;
 }> {
-  if (!isRemoteStorage()) {
-    return { ok: false, canRead: false, canWrite: false, error: "not_remote" };
+  if (!canUseBlob()) {
+    return {
+      ok: false,
+      canRead: false,
+      canWrite: false,
+      error: "Blob غير مفعّل — فعّلي BLOB_READ_WRITE_TOKEN على Production",
+    };
   }
 
   try {
-    const testData = await readDb();
-    await writeToBlob(testData);
+    const sample = await seedDatabase();
+    const wrote = await writeToBlob(sample);
+    if (!wrote) {
+      return {
+        ok: false,
+        canRead: false,
+        canWrite: false,
+        error: "فشل الكتابة على Blob",
+      };
+    }
     const reread = await readFromBlob();
     return {
       ok: Boolean(reread),
       canRead: Boolean(reread),
-      canWrite: true,
+      canWrite: wrote,
     };
   } catch (error) {
     return {

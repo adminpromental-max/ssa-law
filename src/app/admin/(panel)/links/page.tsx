@@ -28,11 +28,15 @@ export default function AdminLinksPage() {
 
   async function saveLink(link: ImportantLink) {
     setSaving(link.id);
-    await fetch("/api/admin/links", {
+    const res = await fetch("/api/admin/links", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(link),
     });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error || "فشل الحفظ");
+    }
     setSaving(null);
   }
 

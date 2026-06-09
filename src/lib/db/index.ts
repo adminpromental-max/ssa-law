@@ -1,21 +1,36 @@
 import fs from "fs/promises";
 import path from "path";
-import { head, put } from "@vercel/blob";
+import { get, put, BlobNotFoundError } from "@vercel/blob";
 import { createSeedDatabase } from "./seed";
 import type { Database } from "./types";
 
 const BLOB_PATHNAME = "ssa-law/database.json";
 
-/** On Vercel with connected Blob store, OIDC auth works without manual token */
-export function hasBlobStorage(): boolean {
+export function isRemoteStorage(): boolean {
   return Boolean(
-    process.env.BLOB_READ_WRITE_TOKEN ||
-      process.env.BLOB_STORE_ID ||
-      process.env.VERCEL
+    process.env.VERCEL ||
+      process.env.BLOB_READ_WRITE_TOKEN ||
+      process.env.BLOB_STORE_ID
   );
 }
 
+export function hasBlobStorage(): boolean {
+  return isRemoteStorage();
+}
+
+function getBlobOptions() {
+  const options: { storeId?: string; token?: string } = {};
+  if (process.env.BLOB_STORE_ID) options.storeId = process.env.BLOB_STORE_ID;
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    options.token = process.env.BLOB_READ_WRITE_TOKEN;
+  }
+  return options;
+}
+
 function getLocalDbPath(): string {
+  if (process.env.VERCEL) {
+    return "/tmp/ssa-law-database.json";
+  }
   return path.join(process.cwd(), "data", "database.json");
 }
 
@@ -39,14 +54,21 @@ async function writeLocalFile(data: Database): Promise<void> {
 }
 
 async function readFromBlob(): Promise<Database | null> {
-  if (!hasBlobStorage()) return null;
-
   try {
-    const meta = await head(BLOB_PATHNAME);
-    const res = await fetch(meta.url, { cache: "no-store" });
-    if (!res.ok) return null;
-    return (await res.json()) as Database;
-  } catch {
+    const result = await get(BLOB_PATHNAME, {
+      access: "public",
+      ...getBlobOptions(),
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    const text = await new Response(result.stream).text();
+    return JSON.parse(text) as Database;
+  } catch (error) {
+    if (error instanceof BlobNotFoundError) return null;
+    console.error("[db] Blob read failed:", error);
     return null;
   }
 }
@@ -57,6 +79,7 @@ async function writeToBlob(data: Database): Promise<void> {
     addRandomSuffix: false,
     allowOverwrite: true,
     contentType: "application/json",
+    ...getBlobOptions(),
   });
 }
 
@@ -71,21 +94,42 @@ async function seedDatabase(): Promise<Database> {
   return createSeedDatabase();
 }
 
+let initPromise: Promise<void> | null = null;
+
+async function ensureRemoteDbInitialized(): Promise<Database> {
+  const seeded = await seedDatabase();
+  await writeToBlob(seeded);
+  return seeded;
+}
+
 export async function readDb(): Promise<Database> {
-  const fromBlob = await readFromBlob();
-  if (fromBlob) return fromBlob;
+  if (isRemoteStorage()) {
+    const fromBlob = await readFromBlob();
+    if (fromBlob) return fromBlob;
+
+    if (!initPromise) {
+      initPromise = ensureRemoteDbInitialized().then(() => undefined);
+    }
+    await initPromise;
+
+    const afterInit = await readFromBlob();
+    if (afterInit) return afterInit;
+
+    return seedDatabase();
+  }
 
   const fromLocal = await readLocalFile();
   if (fromLocal) return fromLocal;
 
   const seeded = await seedDatabase();
-  await writeDb(seeded);
+  await writeLocalFile(seeded);
   return seeded;
 }
 
 export async function writeDb(data: Database): Promise<void> {
-  if (hasBlobStorage()) {
+  if (isRemoteStorage()) {
     await writeToBlob(data);
+    return;
   }
   await writeLocalFile(data);
 }
@@ -98,4 +142,33 @@ export async function updateDb(
   const updated = (result ?? db) as Database;
   await writeDb(updated);
   return updated;
+}
+
+export async function testBlobStorage(): Promise<{
+  ok: boolean;
+  canRead: boolean;
+  canWrite: boolean;
+  error?: string;
+}> {
+  if (!isRemoteStorage()) {
+    return { ok: false, canRead: false, canWrite: false, error: "not_remote" };
+  }
+
+  try {
+    const testData = await readDb();
+    await writeToBlob(testData);
+    const reread = await readFromBlob();
+    return {
+      ok: Boolean(reread),
+      canRead: Boolean(reread),
+      canWrite: true,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      canRead: false,
+      canWrite: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
 }

@@ -36,7 +36,12 @@ export default function AdminTeamPage() {
       body: JSON.stringify(team),
     });
     setSaving(false);
-    setMessage(res.ok ? "تم الحفظ بنجاح" : "فشل الحفظ");
+    if (res.ok) {
+      setMessage("تم الحفظ بنجاح — حدّث الموقع للتأكد");
+    } else {
+      const data = await res.json().catch(() => ({}));
+      setMessage(data.error || "فشل الحفظ");
+    }
   }
 
   function updateMember(

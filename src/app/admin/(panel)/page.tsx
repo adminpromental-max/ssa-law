@@ -1,8 +1,9 @@
-import { readDb, hasBlobStorage } from "@/lib/db";
+import { readDb, hasBlobStorage, testBlobStorage } from "@/lib/db";
 import { Eye, Mail, CalendarCheck, Inbox } from "lucide-react";
 
 export default async function AdminDashboardPage() {
   const hasBlob = hasBlobStorage();
+  const storageTest = hasBlob ? await testBlobStorage() : null;
   const db = await readDb();
   const unreadContact = db.contactSubmissions.filter((s) => !s.read).length;
   const unreadBooking = db.bookingSubmissions.filter((s) => !s.read).length;
@@ -47,8 +48,23 @@ export default async function AdminDashboardPage() {
       {!hasBlob && (
         <div className="mb-8 p-4 rounded-sm border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm leading-relaxed">
           <strong className="text-amber-100">تنبيه:</strong> التخزين الدائم غير مفعّل.
-          من Vercel → Storage → اربطي Blob Store بالمشروع، ثم أعيدي النشر من
-          تبويب Deployments.
+          من Vercel → Storage → اربطي Blob Store بالمشروع، ثم أعيدي النشر.
+        </div>
+      )}
+
+      {storageTest && !storageTest.ok && (
+        <div className="mb-8 p-4 rounded-sm border border-red-500/40 bg-red-500/10 text-red-200 text-sm leading-relaxed">
+          <strong className="text-red-100">خطأ تخزين:</strong>{" "}
+          {storageTest.error || "فشل القراءة/الكتابة على Blob."}
+          <br />
+          من Vercel → Storage → Projects → فعّلي ✓ على Production و Preview
+          لـ BLOB_READ_WRITE_TOKEN ثم Redeploy.
+        </div>
+      )}
+
+      {storageTest?.ok && (
+        <div className="mb-8 p-4 rounded-sm border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-sm">
+          ✓ التخزين الدائم يعمل — التعديلات تُحفظ على الموقع.
         </div>
       )}
 

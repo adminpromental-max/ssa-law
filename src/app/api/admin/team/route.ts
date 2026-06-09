@@ -24,7 +24,10 @@ export async function PUT(request: Request) {
     });
     revalidateSiteContent();
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "فشل الحفظ" }, { status: 500 });
+  } catch (error) {
+    console.error("[admin/team] save failed:", error);
+    const message =
+      error instanceof Error ? error.message : "فشل الحفظ";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

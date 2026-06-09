@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import { readDb, updateDb } from "@/lib/db";
+import { revalidateSiteContent } from "@/lib/revalidate";
 import type { TeamStructure } from "@/data/team";
 
 export async function GET() {
@@ -21,6 +22,7 @@ export async function PUT(request: Request) {
     await updateDb((db) => {
       db.team = team;
     });
+    revalidateSiteContent();
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "فشل الحفظ" }, { status: 500 });

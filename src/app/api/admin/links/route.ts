@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import { readDb, updateDb } from "@/lib/db";
+import { revalidateSiteContent } from "@/lib/revalidate";
 import type { ImportantLink } from "@/lib/db/types";
 
 export async function GET() {
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
     await updateDb((db) => {
       db.importantLinks.push(newLink);
     });
+    revalidateSiteContent();
     return NextResponse.json(newLink);
   } catch {
     return NextResponse.json({ error: "فشل الإضافة" }, { status: 500 });
@@ -62,5 +64,6 @@ export async function DELETE(request: Request) {
   await updateDb((db) => {
     db.importantLinks = db.importantLinks.filter((l) => l.id !== id);
   });
+  revalidateSiteContent();
   return NextResponse.json({ success: true });
 }

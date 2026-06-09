@@ -1,12 +1,16 @@
 import fs from "fs/promises";
 import path from "path";
+import { head, put } from "@vercel/blob";
 import { createSeedDatabase } from "./seed";
 import type { Database } from "./types";
 
-function getDbPath(): string {
-  if (process.env.VERCEL) {
-    return "/tmp/ssa-law-database.json";
-  }
+const BLOB_PATHNAME = "ssa-law/database.json";
+
+function hasBlobStorage(): boolean {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+}
+
+function getLocalDbPath(): string {
   return path.join(process.cwd(), "data", "database.json");
 }
 
@@ -14,38 +18,74 @@ function getSeedPath(): string {
   return path.join(process.cwd(), "data", "database.seed.json");
 }
 
-async function copySeedToDb(): Promise<Database> {
-  const seedPath = getSeedPath();
-  const dbPath = getDbPath();
+async function readLocalFile(): Promise<Database | null> {
+  try {
+    const raw = await fs.readFile(getLocalDbPath(), "utf-8");
+    return JSON.parse(raw) as Database;
+  } catch {
+    return null;
+  }
+}
+
+async function writeLocalFile(data: Database): Promise<void> {
+  const dbPath = getLocalDbPath();
+  await fs.mkdir(path.dirname(dbPath), { recursive: true });
+  await fs.writeFile(dbPath, JSON.stringify(data, null, 2), "utf-8");
+}
+
+async function readFromBlob(): Promise<Database | null> {
+  if (!hasBlobStorage()) return null;
 
   try {
-    const raw = await fs.readFile(seedPath, "utf-8");
-    const data = JSON.parse(raw) as Database;
-    await fs.mkdir(path.dirname(dbPath), { recursive: true });
-    await fs.writeFile(dbPath, JSON.stringify(data, null, 2), "utf-8");
-    return data;
+    const meta = await head(BLOB_PATHNAME, {
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    });
+    const res = await fetch(meta.url, { cache: "no-store" });
+    if (!res.ok) return null;
+    return (await res.json()) as Database;
   } catch {
-    const data = createSeedDatabase();
-    await fs.mkdir(path.dirname(dbPath), { recursive: true });
-    await fs.writeFile(dbPath, JSON.stringify(data, null, 2), "utf-8");
-    return data;
+    return null;
   }
+}
+
+async function writeToBlob(data: Database): Promise<void> {
+  await put(BLOB_PATHNAME, JSON.stringify(data, null, 2), {
+    access: "public",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    contentType: "application/json",
+    token: process.env.BLOB_READ_WRITE_TOKEN,
+  });
+}
+
+async function seedDatabase(): Promise<Database> {
+  try {
+    const raw = await fs.readFile(getSeedPath(), "utf-8");
+    const parsed = JSON.parse(raw) as Database;
+    if (parsed.team && parsed.importantLinks) return parsed;
+  } catch {
+    // use code seed
+  }
+  return createSeedDatabase();
 }
 
 export async function readDb(): Promise<Database> {
-  const dbPath = getDbPath();
-  try {
-    const raw = await fs.readFile(dbPath, "utf-8");
-    return JSON.parse(raw) as Database;
-  } catch {
-    return copySeedToDb();
-  }
+  const fromBlob = await readFromBlob();
+  if (fromBlob) return fromBlob;
+
+  const fromLocal = await readLocalFile();
+  if (fromLocal) return fromLocal;
+
+  const seeded = await seedDatabase();
+  await writeDb(seeded);
+  return seeded;
 }
 
 export async function writeDb(data: Database): Promise<void> {
-  const dbPath = getDbPath();
-  await fs.mkdir(path.dirname(dbPath), { recursive: true });
-  await fs.writeFile(dbPath, JSON.stringify(data, null, 2), "utf-8");
+  if (hasBlobStorage()) {
+    await writeToBlob(data);
+  }
+  await writeLocalFile(data);
 }
 
 export async function updateDb(

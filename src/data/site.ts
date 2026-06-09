@@ -14,10 +14,10 @@ export const siteConfig = {
     mobile: "055-410-1819",
     email: "info@ssa-law.com",
     website: "www.ssa-law.com",
-    whatsapp: "966554101819",
+    whatsapp: "966114490000",
   },
   social: {
-    whatsapp: "https://wa.me/966554101819",
+    whatsapp: "https://wa.me/966114490000",
   },
 };
 

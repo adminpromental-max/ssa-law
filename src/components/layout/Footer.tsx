@@ -91,12 +91,6 @@ export function Footer() {
                   className="text-cream/60"
                 />
               </li>
-              <li>
-                <WhatsAppLink
-                  phone={siteConfig.contact.mobile}
-                  className="text-cream/60"
-                />
-              </li>
               <li className="flex items-center gap-3">
                 <Printer className="w-4 h-4 text-gold shrink-0" />
                 <span className="text-cream/60 text-sm" dir="ltr">

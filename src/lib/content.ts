@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { readDb } from "@/lib/db";
 import { teamStructure } from "@/data/team";
 import { services as staticServices } from "@/data/services";
@@ -7,6 +8,7 @@ import type { Service } from "@/data/services";
 import type { ImportantLink } from "@/lib/db/types";
 
 export async function getTeamStructure(): Promise<TeamStructure> {
+  noStore();
   try {
     const db = await readDb();
     return db.team;
@@ -16,6 +18,7 @@ export async function getTeamStructure(): Promise<TeamStructure> {
 }
 
 export async function getServices(): Promise<Service[]> {
+  noStore();
   try {
     const db = await readDb();
     return db.services;
@@ -25,6 +28,7 @@ export async function getServices(): Promise<Service[]> {
 }
 
 export async function getImportantLinks(): Promise<ImportantLink[]> {
+  noStore();
   try {
     const db = await readDb();
     return db.importantLinks;
@@ -38,6 +42,7 @@ export async function getImportantLinks(): Promise<ImportantLink[]> {
 }
 
 export async function getVisitorCount(): Promise<number> {
+  noStore();
   try {
     const db = await readDb();
     return db.visitorCount;

@@ -2,6 +2,7 @@ import { readDb } from "@/lib/db";
 import { Eye, Mail, CalendarCheck, Inbox } from "lucide-react";
 
 export default async function AdminDashboardPage() {
+  const hasBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
   const db = await readDb();
   const unreadContact = db.contactSubmissions.filter((s) => !s.read).length;
   const unreadBooking = db.bookingSubmissions.filter((s) => !s.read).length;
@@ -41,7 +42,15 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-cream mb-2">لوحة التحكم</h1>
-      <p className="text-cream/50 text-sm mb-8">نظرة عامة على الموقع والطلبات</p>
+      <p className="text-cream/50 text-sm mb-4">نظرة عامة على الموقع والطلبات</p>
+
+      {!hasBlob && (
+        <div className="mb-8 p-4 rounded-sm border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm leading-relaxed">
+          <strong className="text-amber-100">تنبيه:</strong> التخزين الدائم غير مفعّل.
+          من Vercel → Storage → Create Blob Store → اربطيه بالمشروع،
+          ثم أعد النشر. بدونها التعديلات لن تظهر على الموقع.
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
         {stats.map((stat) => {

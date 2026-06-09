@@ -20,9 +20,13 @@ html {
 body {
   background-color: var(--color-black);
   color: var(--color-cream);
-  font-family: var(--font-sans);
+  font-family: var(--font-cairo), "Cairo", system-ui, sans-serif;
   overflow-x: hidden;
   max-width: 100vw;
+}
+
+* {
+  font-family: inherit;
 }
 
 ::selection {

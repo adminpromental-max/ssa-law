@@ -6,7 +6,7 @@ interface PageHeroProps {
 
 export function PageHero({ title, subtitle, description }: PageHeroProps) {
   return (
-    <section className="relative pt-24 sm:pt-32 pb-14 sm:pb-20 bg-black-light section-pattern overflow-hidden">
+    <section className="relative pt-24 sm:pt-32 pb-14 sm:pb-20 section-warm section-pattern overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {subtitle && (

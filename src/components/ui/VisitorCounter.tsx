@@ -3,24 +3,30 @@
 import { useEffect, useState } from "react";
 import { Eye } from "lucide-react";
 
-const BASE_COUNT = 500;
-const STORAGE_KEY = "ssa_visitor_count";
-
 export function VisitorCounter() {
-  const [count, setCount] = useState(BASE_COUNT);
+  const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
     const sessionKey = "ssa_visitor_counted";
-    const stored = localStorage.getItem(STORAGE_KEY);
-    let current = stored ? parseInt(stored, 10) : BASE_COUNT;
 
-    if (!sessionStorage.getItem(sessionKey)) {
-      current += 1;
-      localStorage.setItem(STORAGE_KEY, String(current));
-      sessionStorage.setItem(sessionKey, "1");
+    async function track() {
+      try {
+        if (!sessionStorage.getItem(sessionKey)) {
+          const res = await fetch("/api/visitors", { method: "POST" });
+          const data = await res.json();
+          setCount(data.count);
+          sessionStorage.setItem(sessionKey, "1");
+        } else {
+          const res = await fetch("/api/visitors");
+          const data = await res.json();
+          setCount(data.count);
+        }
+      } catch {
+        setCount(500);
+      }
     }
 
-    setCount(current);
+    track();
   }, []);
 
   return (
@@ -29,7 +35,7 @@ export function VisitorCounter() {
       <span>
         عدد الزوار:{" "}
         <span className="text-gold-dark font-bold tabular-nums" dir="ltr">
-          {count.toLocaleString("ar-SA")}
+          {count !== null ? count.toLocaleString("ar-SA") : "..."}
         </span>
       </span>
     </div>

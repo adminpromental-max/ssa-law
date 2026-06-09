@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { updateDb } from "@/lib/db";
+import crypto from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -13,16 +15,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // TODO: Integrate email service (e.g. Resend, SendGrid) on deployment
-    console.log("Booking form submission:", {
-      name,
-      phone,
-      email,
-      service,
-      preferredDate,
-      preferredTime,
-      notes,
-      timestamp: new Date().toISOString(),
+    await updateDb((db) => {
+      db.bookingSubmissions.unshift({
+        id: crypto.randomUUID(),
+        name,
+        phone,
+        email,
+        service,
+        preferredDate,
+        preferredTime,
+        notes,
+        createdAt: new Date().toISOString(),
+        read: false,
+      });
     });
 
     return NextResponse.json({ success: true });

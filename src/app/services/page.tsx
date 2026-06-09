@@ -20,7 +20,7 @@ export default function ServicesPage() {
         description="نقدم حزمة متكاملة من الخدمات القانونية تغطي جميع احتياجاتكم الفردية والتجارية"
       />
 
-      <section className="py-24 bg-black">
+      <section className="py-24 section-deep">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service) => (
@@ -30,7 +30,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="py-24 bg-black-light">
+      <section className="py-24 section-soft">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <SectionHeading
             title="هل تحتاج خدمة قانونية محددة؟"

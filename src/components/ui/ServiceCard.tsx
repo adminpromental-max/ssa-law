@@ -39,7 +39,7 @@ export function ServiceCard({
   return (
     <Link
       href={`/services/${slug}`}
-      className={`group card-surface block bg-black-light rounded-sm p-6 sm:p-8 transition-all duration-500 ${
+      className={`group card-surface block card-elevated rounded-sm p-6 sm:p-8 transition-all duration-500 ${
         goldFrame
           ? "border-2 border-gold/40 shadow-[inset_0_0_0_1px_rgba(201,162,39,0.15)] md:hover:border-gold md:hover:-translate-y-1 md:hover:shadow-[0_12px_30px_rgba(201,162,39,0.15)]"
           : "border border-gold/10 md:hover:border-gold/40 md:hover:gold-glow"

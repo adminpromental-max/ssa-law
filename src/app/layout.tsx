@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Cairo } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -16,7 +17,7 @@ const cairo = Cairo({
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0a0a0a",
+  themeColor: "#141210",
 };
 
 export const metadata: Metadata = {
@@ -35,18 +36,22 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
+  const isAdmin = pathname.startsWith("/admin");
+
   return (
     <html lang="ar" dir="rtl" className={cairo.variable}>
       <body className={`${cairo.className} antialiased`}>
-        <Header />
+        {!isAdmin && <Header />}
         <main>{children}</main>
-        <Footer />
-        <WhatsAppButton />
+        {!isAdmin && <Footer />}
+        {!isAdmin && <WhatsAppButton />}
       </body>
     </html>
   );

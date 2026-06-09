@@ -8,22 +8,22 @@ import {
 
 interface TeamCardProps {
   member: TeamMember;
+  variant?: "default" | "lead";
 }
 
-export function TeamCard({ member }: TeamCardProps) {
+export function TeamCard({ member, variant = "default" }: TeamCardProps) {
   const experienceYears = getExperienceYears(member.hireDate);
+  const isLead = variant === "lead";
 
   return (
     <div
-      className={`card-surface bg-black-light border rounded-sm overflow-hidden transition-[border-color,box-shadow] duration-300 md:hover:gold-glow ${
-        member.isLead
-          ? "border-gold/40 lg:col-span-2"
-          : "border-gold/10 md:hover:border-gold/30"
+      className={`card-surface card-elevated rounded-sm overflow-hidden transition-[border-color,box-shadow] duration-300 md:hover:gold-glow ${
+        isLead ? "border-gold/40" : "md:hover:border-gold/30"
       }`}
     >
       <div
-        className={`relative bg-black-muted flex items-center justify-center ${
-          member.isLead ? "h-72" : "h-64"
+        className={`relative bg-warm-900 flex items-center justify-center ${
+          isLead ? "h-72" : "h-64"
         }`}
       >
         {member.image ? (
@@ -42,7 +42,7 @@ export function TeamCard({ member }: TeamCardProps) {
             <span className="text-sm">الصورة قريباً</span>
           </div>
         )}
-        {member.isLead && (
+        {isLead && (
           <div className="absolute top-4 right-4 bg-gold text-black text-xs font-bold px-3 py-1 rounded-sm">
             المدير العام
           </div>
@@ -52,7 +52,6 @@ export function TeamCard({ member }: TeamCardProps) {
         <h3 className="text-lg font-bold text-cream mb-1 leading-snug">
           {member.name}
         </h3>
-        <p className="text-gold text-sm font-medium mb-3">{member.role}</p>
         <div className="flex items-start gap-2 text-cream/60 text-sm mb-3">
           <Briefcase className="w-4 h-4 text-gold shrink-0 mt-0.5" />
           <div>

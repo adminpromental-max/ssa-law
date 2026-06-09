@@ -31,6 +31,9 @@ yarn-error.log*
 # env files
 .env*.local
 
+# runtime database
+/data/database.json
+
 # vercel
 .vercel
 

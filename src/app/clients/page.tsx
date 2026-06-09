@@ -19,7 +19,7 @@ export default function ClientsPage() {
         description="اكتسبنا ثقة العديد من الجهات الرسمية والشركات الوطنية الرائدة في المملكة"
       />
 
-      <section className="py-24 bg-black">
+      <section className="py-24 section-deep">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="شركاء النجاح"
@@ -29,7 +29,7 @@ export default function ClientsPage() {
             {clients.map((client) => (
               <div
                 key={client.shortName}
-                className="card-surface bg-black-light border border-gold/10 rounded-sm p-10 text-center md:hover:border-gold/30 md:hover:gold-glow transition-[border-color,box-shadow] duration-300"
+                className="card-surface card-elevated border border-gold/10 rounded-sm p-10 text-center md:hover:border-gold/30 md:hover:gold-glow transition-[border-color,box-shadow] duration-300"
               >
                 <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-6">
                   <Building className="w-10 h-10 text-gold" />
@@ -47,7 +47,7 @@ export default function ClientsPage() {
         </div>
       </section>
 
-      <section className="py-24 bg-black-light section-pattern">
+      <section className="py-24 section-warm section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="لماذا يثقون بنا"

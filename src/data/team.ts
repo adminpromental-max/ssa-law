@@ -1,19 +1,28 @@
 export interface TeamMember {
   id: string;
   name: string;
-  role: string;
   hireDate: string;
   qualifications?: string;
   specialties?: string[];
-  isLead?: boolean;
   image?: string;
 }
 
-export const teamMembers: TeamMember[] = [
-  {
+export interface TeamDepartment {
+  id: string;
+  title: string;
+  members: TeamMember[];
+}
+
+export interface TeamStructure {
+  generalManager: TeamMember;
+  officeManager: TeamMember;
+  departments: TeamDepartment[];
+}
+
+export const teamStructure: TeamStructure = {
+  generalManager: {
     id: "saleh-al-amri",
     name: "المحامي/ صالح بن سلمان العمري",
-    role: "المدير العام",
     hireDate: "2004-08-15",
     qualifications:
       "مستشار قانوني بوزارة العدل (ثاني) · مدير إدارة التحكيم والمصلحة · ماجستير قانون",
@@ -22,39 +31,70 @@ export const teamMembers: TeamMember[] = [
       "الاستشارات القانونية",
       "إدارة المكتب",
     ],
-    isLead: true,
-    // image: "/images/team/saleh-al-amri.jpg",
   },
-  {
+  officeManager: {
     id: "ameen-othman",
     name: "الأستاذ/ أمين عبد الخالق عتمان",
-    role: "مدير المكتب",
     hireDate: "2011-03-20",
     specialties: ["إدارة العمليات", "تنسيق القضايا"],
-    // image: "/images/team/ameen-othman.jpg",
   },
-  {
-    id: "mahmoud-nada",
-    name: "الأستاذ/ محمود صلاح الدين ندا",
-    role: "المستشار المالي والاقتصادي",
-    hireDate: "2013-11-05",
-    specialties: ["الاستشارات المالية", "التحليل الاقتصادي"],
-    // image: "/images/team/mahmoud-nada.jpg",
-  },
-  {
-    id: "mahmoud-abu-sheta",
-    name: "الأستاذ/ محمود إسماعيل أبو شيته",
-    role: "مستشار قانوني",
-    hireDate: "2015-06-12",
-    specialties: ["الاستشارات القانونية", "صياغة العقود"],
-    // image: "/images/team/mahmoud-abu-sheta.jpg",
-  },
-  {
-    id: "mayad-al-ahmri",
-    name: "الأستاذة/ ميعاد حسن الأحمري",
-    role: "مستشارة قانونية",
-    hireDate: "2017-09-01",
-    specialties: ["الاستشارات القانونية", "القضايا الحقوقية"],
-    // image: "/images/team/mayad-al-ahmri.jpg",
-  },
-];
+  departments: [
+    {
+      id: "financial-consultant",
+      title: "المستشار المالي والاقتصادي",
+      members: [
+        {
+          id: "mahmoud-nada",
+          name: "الأستاذ/ محمود صلاح الدين ندا",
+          hireDate: "2013-11-05",
+          specialties: ["الاستشارات المالية", "التحليل الاقتصادي"],
+        },
+      ],
+    },
+    {
+      id: "legal-consultants",
+      title: "المستشارين القانونيين",
+      members: [
+        {
+          id: "mahmoud-abu-sheta",
+          name: "الأستاذ/ محمود إسماعيل أبو شيته",
+          hireDate: "2015-06-12",
+          specialties: ["الاستشارات القانونية", "صياغة العقود"],
+        },
+        {
+          id: "mayad-al-ahmri",
+          name: "الأستاذة/ ميعاد حسن الأحمري",
+          hireDate: "2017-09-01",
+          specialties: ["الاستشارات القانونية", "القضايا الحقوقية"],
+        },
+      ],
+    },
+    {
+      id: "arbitrators",
+      title: "المحكمين",
+      members: [],
+    },
+    {
+      id: "notarization",
+      title: "التوثيق والإفراغ",
+      members: [],
+    },
+    {
+      id: "conciliation",
+      title: "الصلح",
+      members: [],
+    },
+  ],
+};
+
+/** Flat list for backward compatibility */
+export function flattenTeam(structure: TeamStructure): TeamMember[] {
+  const all: TeamMember[] = [
+    structure.generalManager,
+    structure.officeManager,
+    ...structure.departments.flatMap((d) => d.members),
+  ];
+  return all;
+}
+
+export const teamMembers = flattenTeam(teamStructure);

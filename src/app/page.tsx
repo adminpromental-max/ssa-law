@@ -10,34 +10,33 @@ import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { HeroNamePlate } from "@/components/ui/HeroNamePlate";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ServiceCard } from "@/components/ui/ServiceCard";
-import { TeamCard } from "@/components/ui/TeamCard";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { VisitorCounter } from "@/components/ui/VisitorCounter";
 import { ImportantLinks } from "@/components/sections/ImportantLinks";
-import { services } from "@/data/services";
-import { teamMembers } from "@/data/team";
+import { TeamOrgChart } from "@/components/team/TeamOrgChart";
+import { getServices, getTeamStructure } from "@/lib/content";
 import { clients } from "@/data/clients";
 import { siteConfig, values, stats } from "@/data/site";
 
-export default function HomePage() {
-  const leadMember = teamMembers.find((m) => m.isLead);
-  const otherMembers = teamMembers.filter((m) => !m.isLead).slice(0, 3);
+export default async function HomePage() {
+  const [services, teamStructure] = await Promise.all([
+    getServices(),
+    getTeamStructure(),
+  ]);
 
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-[100dvh] flex items-center bg-[#e8e0d0] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-bl from-gold/10 via-[#ebe3d4] to-[#ddd4c4]/90" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gold/25" />
-        <div className="hidden md:block absolute bottom-10 left-10 w-64 h-64 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative min-h-[100dvh] flex items-center section-hero-light overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-bl from-gold/8 via-transparent to-gold-muted/5" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gold/20" />
+        <div className="hidden md:block absolute bottom-10 left-10 w-64 h-64 bg-gold/8 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-20 w-full">
           <div className="flex flex-col lg:flex-row items-center lg:items-center gap-10 lg:gap-14">
-            {/* Cleeshah - RIGHT in RTL */}
             <div className="w-full lg:flex-1 flex justify-center lg:justify-start order-1">
               <HeroNamePlate />
             </div>
 
-            {/* Text - LEFT in RTL */}
             <div className="w-full lg:flex-1 order-2 text-center lg:text-end">
               <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3 mb-5">
                 <div className="inline-flex items-center gap-2 bg-white/75 border border-gold/30 rounded-sm px-3 py-2 shadow-sm">
@@ -74,7 +73,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="py-12 sm:py-16 bg-black-light border-y border-gold/10">
+      <section className="py-12 sm:py-16 section-warm border-y border-gold/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
             {stats.map((stat) => (
@@ -90,7 +89,7 @@ export default function HomePage() {
       </section>
 
       {/* About snippet */}
-      <section className="py-16 sm:py-24 bg-black">
+      <section className="py-16 sm:py-24 section-deep">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
@@ -121,7 +120,7 @@ export default function HomePage() {
                   variant="fade-up"
                   delay={index * 100}
                 >
-                  <div className="value-card-motion bg-black-light rounded-sm p-6 h-full">
+                  <div className="value-card-motion card-elevated rounded-sm p-6 h-full">
                     <Shield className="w-8 h-8 text-gold mb-4" />
                     <h3 className="text-cream font-bold mb-2 leading-snug">
                       {v.title}
@@ -138,7 +137,7 @@ export default function HomePage() {
       </section>
 
       {/* Services */}
-      <section className="py-16 sm:py-24 bg-black-light section-pattern">
+      <section className="py-16 sm:py-24 section-soft section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="خدماتنا"
@@ -167,7 +166,7 @@ export default function HomePage() {
       <ImportantLinks />
 
       {/* Clients */}
-      <section className="py-16 sm:py-24 bg-black">
+      <section className="py-16 sm:py-24 section-warm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="ثقة عملائنا"
@@ -178,7 +177,7 @@ export default function HomePage() {
             {clients.map((client) => (
               <div
                 key={client.shortName}
-                className="bg-black-light border border-gold/10 rounded-sm p-8 text-center hover:border-gold/30 transition-colors"
+                className="card-elevated rounded-sm p-8 text-center hover:border-gold/30 transition-colors"
               >
                 <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
                   <Users className="w-8 h-8 text-gold" />
@@ -196,19 +195,14 @@ export default function HomePage() {
       </section>
 
       {/* Team preview */}
-      <section className="py-16 sm:py-24 bg-black-light">
+      <section className="py-16 sm:py-24 section-accent section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="فريق العمل"
-            title="خبراء قانونيون مؤهلون"
+            title="الهيكل الإداري للمكتب"
             description="فريق عمل مؤهل بخبرة كبيرة في مجال القانون بشتى مجالاته"
           />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {leadMember && <TeamCard member={leadMember} />}
-            {otherMembers.map((member) => (
-              <TeamCard key={member.id} member={member} />
-            ))}
-          </div>
+          <TeamOrgChart structure={teamStructure} compact />
           <div className="text-center mt-12">
             <Button href="/team" variant="outline">
               تعرف على الفريق بالكامل
@@ -218,7 +212,7 @@ export default function HomePage() {
       </section>
 
       {/* Why us */}
-      <section className="py-24 bg-black section-pattern">
+      <section className="py-24 section-deep section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading subtitle="لماذا نحن" title="ما يميز مكتبنا" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -240,7 +234,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 sm:py-24 bg-black-light">
+      <section className="py-16 sm:py-24 section-warm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold gold-text-gradient mb-6 leading-snug px-2">
             هل تحتاج استشارة قانونية؟

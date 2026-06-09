@@ -20,7 +20,7 @@ export default function AboutPage() {
         description="شركة مهنية متخصصة في تقديم الخدمات القانونية والاستشارات والتوثيق"
       />
 
-      <section className="py-24 bg-black">
+      <section className="py-24 section-deep">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
@@ -58,7 +58,7 @@ export default function AboutPage() {
                 align="right"
                 light
               />
-              <div className="bg-black-light border border-gold/10 rounded-sm p-8">
+              <div className="card-elevated border border-gold/10 rounded-sm p-8">
                 <p className="text-cream/70 leading-relaxed mb-6">
                   فلسفتنا هي التفاني الكامل للجودة النوعية والاستجابة والسرية
                   والفعالية، والاستخدام الأمثل للتكنولوجيا. ندرك الحاجة إلى
@@ -82,7 +82,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-24 bg-black-light section-pattern">
+      <section className="py-24 section-warm section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="رؤيتنا"
@@ -90,7 +90,7 @@ export default function AboutPage() {
             description="نطمح لأن نكون الخيار الأول للخدمات القانونية في المملكة"
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-black border border-gold/10 rounded-sm p-8 text-center">
+            <div className="section-deep border border-gold/10 rounded-sm p-8 text-center">
               <Target className="w-10 h-10 text-gold mx-auto mb-4" />
               <h3 className="text-cream font-bold text-lg mb-3">رسالتنا</h3>
               <p className="text-cream/60 text-sm leading-relaxed">
@@ -98,7 +98,7 @@ export default function AboutPage() {
                 استثنائية
               </p>
             </div>
-            <div className="bg-black border border-gold/10 rounded-sm p-8 text-center">
+            <div className="section-deep border border-gold/10 rounded-sm p-8 text-center">
               <Heart className="w-10 h-10 text-gold mx-auto mb-4" />
               <h3 className="text-cream font-bold text-lg mb-3">قيمنا</h3>
               <p className="text-cream/60 text-sm leading-relaxed">
@@ -106,7 +106,7 @@ export default function AboutPage() {
                 العملاء
               </p>
             </div>
-            <div className="bg-black border border-gold/10 rounded-sm p-8 text-center">
+            <div className="section-deep border border-gold/10 rounded-sm p-8 text-center">
               <GraduationCap className="w-10 h-10 text-gold mx-auto mb-4" />
               <h3 className="text-cream font-bold text-lg mb-3">خبرتنا</h3>
               <p className="text-cream/60 text-sm leading-relaxed">
@@ -117,7 +117,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-24 bg-black">
+      <section className="py-24 section-deep">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="المسؤولية المجتمعية"
@@ -128,7 +128,7 @@ export default function AboutPage() {
             {communityWork.map((item) => (
               <div
                 key={item.title}
-                className="bg-black-light border border-gold/10 rounded-sm p-8 hover:border-gold/30 transition-colors"
+                className="card-elevated border border-gold/10 rounded-sm p-8 hover:border-gold/30 transition-colors"
               >
                 <GraduationCap className="w-8 h-8 text-gold mb-4" />
                 <h3 className="text-cream font-bold text-lg mb-2">

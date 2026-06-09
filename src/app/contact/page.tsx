@@ -19,7 +19,7 @@ export default function ContactPage() {
         description="لا تتردد في التواصل معنا لأي استفسار أو طلب خدمة قانونية"
       />
 
-      <section className="py-24 bg-black">
+      <section className="py-24 section-soft">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-1">

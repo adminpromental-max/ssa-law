@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-import { importantLinks } from "@/data/links";
+import { getImportantLinks } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-export function ImportantLinks() {
+export async function ImportantLinks() {
+  const importantLinks = await getImportantLinks();
+
   return (
-    <section className="py-16 sm:py-24 bg-black border-t border-gold/10">
+    <section className="py-16 sm:py-24 section-accent border-t border-gold/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           subtitle="مصادر مفيدة"
@@ -15,12 +17,12 @@ export function ImportantLinks() {
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {importantLinks.map((link, index) => (
-            <ScrollReveal key={link.title} variant="zoom-in" delay={index * 60}>
+            <ScrollReveal key={link.id} variant="zoom-in" delay={index * 60}>
               <Link
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-between gap-3 bg-black-light border border-gold/25 rounded-sm px-5 py-4 hover:border-gold hover:bg-gold/5 transition-all duration-300"
+                className="group flex items-center justify-between gap-3 card-elevated rounded-sm px-5 py-4 hover:border-gold/50 hover:bg-gold/5 transition-all duration-300"
               >
                 <span className="text-cream group-hover:text-gold transition-colors text-sm sm:text-base">
                   {link.title}

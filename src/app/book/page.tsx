@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { CalendarCheck, Phone, Clock } from "lucide-react";
+import { CalendarCheck, Clock } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { BookingForm } from "@/components/forms/BookingForm";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { siteConfig } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -44,18 +45,15 @@ export default function BookPage() {
               </div>
 
               <div className="bg-black-light border border-gold/10 rounded-sm p-6">
-                <Phone className="w-8 h-8 text-gold mb-4" />
                 <h3 className="text-cream font-bold mb-2">للاستفسار العاجل</h3>
-                <p className="text-cream/60 text-sm mb-3">
-                  تواصل مباشرة عبر الهاتف أو واتساب
+                <p className="text-cream/60 text-sm mb-4">
+                  تواصل مباشرة عبر واتساب
                 </p>
-                <a
-                  href={`tel:${siteConfig.contact.mobile}`}
-                  className="text-gold text-sm hover:underline"
-                  dir="ltr"
-                >
-                  {siteConfig.contact.mobile}
-                </a>
+                <WhatsAppLink
+                  phone={siteConfig.contact.mobile}
+                  className="text-gold"
+                  showNumber="always"
+                />
               </div>
             </div>
 

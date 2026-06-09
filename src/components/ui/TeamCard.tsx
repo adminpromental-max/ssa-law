@@ -1,12 +1,18 @@
 import Image from "next/image";
-import { User } from "lucide-react";
+import { User, Briefcase } from "lucide-react";
 import type { TeamMember } from "@/data/team";
+import {
+  formatHireDate,
+  getExperienceYears,
+} from "@/lib/experience";
 
 interface TeamCardProps {
   member: TeamMember;
 }
 
 export function TeamCard({ member }: TeamCardProps) {
+  const experienceYears = getExperienceYears(member.hireDate);
+
   return (
     <div
       className={`card-surface bg-black-light border rounded-sm overflow-hidden transition-[border-color,box-shadow] duration-300 md:hover:gold-glow ${
@@ -43,8 +49,19 @@ export function TeamCard({ member }: TeamCardProps) {
         )}
       </div>
       <div className="p-6">
-        <h3 className="text-lg font-bold text-cream mb-1">{member.name}</h3>
+        <h3 className="text-lg font-bold text-cream mb-1 leading-snug">
+          {member.name}
+        </h3>
         <p className="text-gold text-sm font-medium mb-3">{member.role}</p>
+        <div className="flex items-start gap-2 text-cream/60 text-sm mb-3">
+          <Briefcase className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+          <div>
+            <p>تاريخ التعيين: {formatHireDate(member.hireDate)}</p>
+            <p className="text-gold/80 mt-1">
+              خبرة {experienceYears} {experienceYears === 1 ? "سنة" : "سنوات"}
+            </p>
+          </div>
+        </div>
         {member.qualifications && (
           <p className="text-cream/60 text-sm leading-relaxed mb-4">
             {member.qualifications}

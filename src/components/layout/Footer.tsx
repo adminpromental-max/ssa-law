@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, Printer } from "lucide-react";
+import { Mail, MapPin, Printer } from "lucide-react";
 import { navLinks, siteConfig } from "@/data/site";
 import { Logo } from "@/components/ui/Logo";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 export function Footer() {
   return (
@@ -84,25 +85,17 @@ export function Footer() {
                   {siteConfig.contact.address}
                 </span>
               </li>
-              <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-gold shrink-0" />
-                <a
-                  href={`tel:${siteConfig.contact.phone}`}
-                  className="text-cream/60 hover:text-gold text-sm transition-colors"
-                  dir="ltr"
-                >
-                  {siteConfig.contact.phone}
-                </a>
+              <li>
+                <WhatsAppLink
+                  phone={siteConfig.contact.phone}
+                  className="text-cream/60"
+                />
               </li>
-              <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-gold shrink-0" />
-                <a
-                  href={`tel:${siteConfig.contact.mobile}`}
-                  className="text-cream/60 hover:text-gold text-sm transition-colors"
-                  dir="ltr"
-                >
-                  {siteConfig.contact.mobile}
-                </a>
+              <li>
+                <WhatsAppLink
+                  phone={siteConfig.contact.mobile}
+                  className="text-cream/60"
+                />
               </li>
               <li className="flex items-center gap-3">
                 <Printer className="w-4 h-4 text-gold shrink-0" />

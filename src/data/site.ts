@@ -6,6 +6,7 @@ export const siteConfig = {
   description:
     "شركة مهنية متخصصة في تقديم الخدمات القانونية والاستشارات والتوثيق في المملكة العربية السعودية",
   license: "36 / 419",
+  foundedYear: "1436 هـ",
   contact: {
     address: "الرياض - حي الربوة",
     phone: "011-449-0000",

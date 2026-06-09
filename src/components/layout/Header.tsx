@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/data/site";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -37,14 +38,10 @@ export function Header() {
             </nav>
 
             <div className="hidden lg:flex items-center gap-4">
-              <a
-                href={`tel:${siteConfig.contact.phone}`}
-                className="flex items-center gap-2 text-cream/60 hover:text-gold text-sm transition-colors"
-                dir="ltr"
-              >
-                <Phone className="w-4 h-4" />
-                {siteConfig.contact.phone}
-              </a>
+              <WhatsAppLink
+                phone={siteConfig.contact.mobile}
+                className="text-cream/60"
+              />
               <Button href="/book" size="sm">
                 احجز استشارة
               </Button>
@@ -86,14 +83,13 @@ export function Header() {
                 <Button href="/book" className="w-full" onClick={() => setOpen(false)}>
                   احجز استشارة
                 </Button>
-                <a
-                  href={`tel:${siteConfig.contact.mobile}`}
-                  className="flex items-center justify-center gap-2 text-gold text-sm py-3"
-                  dir="ltr"
-                >
-                  <Phone className="w-4 h-4" />
-                  {siteConfig.contact.mobile}
-                </a>
+                <div className="flex justify-center py-2">
+                  <WhatsAppLink
+                    phone={siteConfig.contact.mobile}
+                    className="text-gold"
+                    showNumber="always"
+                  />
+                </div>
               </div>
             </nav>
           </div>

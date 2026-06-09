@@ -24,6 +24,7 @@ interface ServiceCardProps {
   title: string;
   shortDescription: string;
   icon: string;
+  goldFrame?: boolean;
 }
 
 export function ServiceCard({
@@ -31,13 +32,18 @@ export function ServiceCard({
   title,
   shortDescription,
   icon,
+  goldFrame = false,
 }: ServiceCardProps) {
   const Icon = iconMap[icon] || Scale;
 
   return (
     <Link
       href={`/services/${slug}`}
-      className="group card-surface block bg-black-light border border-gold/10 rounded-sm p-6 sm:p-8 md:hover:border-gold/40 md:hover:gold-glow transition-[border-color,box-shadow] duration-300"
+      className={`group card-surface block bg-black-light rounded-sm p-6 sm:p-8 transition-all duration-500 ${
+        goldFrame
+          ? "border-2 border-gold/40 shadow-[inset_0_0_0_1px_rgba(201,162,39,0.15)] md:hover:border-gold md:hover:-translate-y-1 md:hover:shadow-[0_12px_30px_rgba(201,162,39,0.15)]"
+          : "border border-gold/10 md:hover:border-gold/40 md:hover:gold-glow"
+      }`}
     >
       <div className="w-14 h-14 rounded-sm bg-gold/10 flex items-center justify-center mb-6 group-hover:bg-gold/20 transition-colors">
         <Icon className="w-7 h-7 text-gold" />

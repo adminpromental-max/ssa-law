@@ -15,7 +15,7 @@ export function Logo({ showText = true, size = "md", onClick }: LogoProps) {
     <Link
       href="/"
       onClick={onClick}
-      className="flex items-center gap-3 group min-w-0"
+      className="flex items-center gap-3 group min-w-0 max-w-full"
     >
       <Image
         src="/images/lawyer-logo.png"
@@ -26,11 +26,11 @@ export function Logo({ showText = true, size = "md", onClick }: LogoProps) {
         priority
       />
       {showText && (
-        <div className="hidden sm:block min-w-0">
-          <p className="text-cream font-bold text-sm leading-tight group-hover:text-gold transition-colors truncate">
+        <div className="hidden md:block min-w-0 max-w-[200px] lg:max-w-none">
+          <p className="text-cream font-bold text-sm leading-snug group-hover:text-gold transition-colors">
             {siteConfig.name}
           </p>
-          <p className="text-gold/60 text-xs truncate">
+          <p className="text-gold/60 text-xs leading-snug mt-0.5">
             للمحاماة والاستشارات القانونية
           </p>
         </div>

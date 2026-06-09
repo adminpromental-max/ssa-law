@@ -1,8 +1,8 @@
-import { readDb } from "@/lib/db";
+import { readDb, hasBlobStorage } from "@/lib/db";
 import { Eye, Mail, CalendarCheck, Inbox } from "lucide-react";
 
 export default async function AdminDashboardPage() {
-  const hasBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  const hasBlob = hasBlobStorage();
   const db = await readDb();
   const unreadContact = db.contactSubmissions.filter((s) => !s.read).length;
   const unreadBooking = db.bookingSubmissions.filter((s) => !s.read).length;
@@ -47,8 +47,8 @@ export default async function AdminDashboardPage() {
       {!hasBlob && (
         <div className="mb-8 p-4 rounded-sm border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm leading-relaxed">
           <strong className="text-amber-100">تنبيه:</strong> التخزين الدائم غير مفعّل.
-          من Vercel → Storage → Create Blob Store → اربطيه بالمشروع،
-          ثم أعد النشر. بدونها التعديلات لن تظهر على الموقع.
+          من Vercel → Storage → اربطي Blob Store بالمشروع، ثم أعيدي النشر من
+          تبويب Deployments.
         </div>
       )}
 

@@ -6,8 +6,13 @@ import type { Database } from "./types";
 
 const BLOB_PATHNAME = "ssa-law/database.json";
 
-function hasBlobStorage(): boolean {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+/** On Vercel with connected Blob store, OIDC auth works without manual token */
+export function hasBlobStorage(): boolean {
+  return Boolean(
+    process.env.BLOB_READ_WRITE_TOKEN ||
+      process.env.BLOB_STORE_ID ||
+      process.env.VERCEL
+  );
 }
 
 function getLocalDbPath(): string {
@@ -37,9 +42,7 @@ async function readFromBlob(): Promise<Database | null> {
   if (!hasBlobStorage()) return null;
 
   try {
-    const meta = await head(BLOB_PATHNAME, {
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    });
+    const meta = await head(BLOB_PATHNAME);
     const res = await fetch(meta.url, { cache: "no-store" });
     if (!res.ok) return null;
     return (await res.json()) as Database;
@@ -54,7 +57,6 @@ async function writeToBlob(data: Database): Promise<void> {
     addRandomSuffix: false,
     allowOverwrite: true,
     contentType: "application/json",
-    token: process.env.BLOB_READ_WRITE_TOKEN,
   });
 }
 

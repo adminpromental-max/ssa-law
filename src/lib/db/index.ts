@@ -74,7 +74,7 @@ async function readFromBlob(): Promise<Database | null> {
 
   try {
     const result = await get(BLOB_PATHNAME, {
-      access: "public",
+      access: "private",
       ...getBlobOptions(),
     });
 
@@ -96,7 +96,7 @@ async function writeToBlob(data: Database): Promise<boolean> {
 
   try {
     await put(BLOB_PATHNAME, JSON.stringify(data, null, 2), {
-      access: "public",
+      access: "private",
       addRandomSuffix: false,
       allowOverwrite: true,
       contentType: "application/json",

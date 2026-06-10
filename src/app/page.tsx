@@ -18,6 +18,8 @@ import { getServices, getTeamStructure } from "@/lib/content";
 import { clients } from "@/data/clients";
 import { siteConfig, values, stats } from "@/data/site";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [services, teamStructure] = await Promise.all([
     getServices(),

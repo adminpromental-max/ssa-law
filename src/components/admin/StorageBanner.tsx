@@ -6,6 +6,7 @@ interface StorageStatus {
   ok: boolean;
   canRead: boolean;
   canWrite: boolean;
+  hasData?: boolean;
   hasToken: boolean;
   hasStoreId: boolean;
   error?: string;
@@ -32,10 +33,15 @@ export function StorageBanner() {
 
   if (!status) return null;
 
-  if (status.ok) {
+  if (status.ok && status.canWrite) {
     return (
       <div className="mb-8 p-4 rounded-sm border border-emerald-500/30 bg-emerald-500/10 text-emerald-200 text-sm">
         ✓ التخزين الدائم يعمل — التعديلات تُحفظ على الموقع.
+        {!status.hasData && (
+          <span className="block mt-1 text-emerald-200/80">
+            لم تُحفظ بيانات بعد — عدّلي واحفظي من فريق العمل أو الروابط.
+          </span>
+        )}
       </div>
     );
   }

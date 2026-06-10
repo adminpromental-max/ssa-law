@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { get, put, BlobNotFoundError } from "@vercel/blob";
+import { get, put, list, BlobNotFoundError } from "@vercel/blob";
 import { createSeedDatabase } from "./seed";
 import type { Database } from "./types";
 
@@ -27,9 +27,6 @@ function getBlobOptions() {
 }
 
 function getLocalDbPath(): string {
-  if (process.env.VERCEL) {
-    return "/tmp/ssa-law-database.json";
-  }
   return path.join(process.cwd(), "data", "database.json");
 }
 
@@ -72,23 +69,39 @@ async function writeLocalFile(data: Database): Promise<boolean> {
 async function readFromBlob(): Promise<Database | null> {
   if (!canUseBlob()) return null;
 
+  const opts = getBlobOptions();
+
   try {
     const result = await get(BLOB_PATHNAME, {
       access: "private",
-      ...getBlobOptions(),
+      useCache: false,
+      ...opts,
     });
 
-    if (!result || result.statusCode !== 200 || !result.stream) {
-      return null;
+    if (result?.statusCode === 200 && result.stream) {
+      const text = await new Response(result.stream).text();
+      return normalizeDb(JSON.parse(text) as Database);
     }
-
-    const text = await new Response(result.stream).text();
-    return normalizeDb(JSON.parse(text) as Database);
   } catch (error) {
-    if (error instanceof BlobNotFoundError) return null;
-    console.error("[db] blob read failed:", error);
-    return null;
+    if (!(error instanceof BlobNotFoundError)) {
+      console.error("[db] blob get failed:", error);
+    }
   }
+
+  try {
+    const { blobs } = await list({ prefix: BLOB_PATHNAME, ...opts });
+    const match = blobs.find((b) => b.pathname === BLOB_PATHNAME);
+    if (match?.url) {
+      const res = await fetch(match.url, { cache: "no-store" });
+      if (res.ok) {
+        return normalizeDb((await res.json()) as Database);
+      }
+    }
+  } catch (error) {
+    console.error("[db] blob list failed:", error);
+  }
+
+  return null;
 }
 
 async function writeToBlob(data: Database): Promise<boolean> {
@@ -120,22 +133,22 @@ async function seedDatabase(): Promise<Database> {
   return createSeedDatabase();
 }
 
-async function safePersist(data: Database): Promise<void> {
-  const blobOk = await writeToBlob(data);
-  if (blobOk) return;
-  await writeLocalFile(data);
-}
-
 export async function readDb(): Promise<Database> {
   try {
-    const fromBlob = await readFromBlob();
-    if (fromBlob) return fromBlob;
+    if (canUseBlob()) {
+      const fromBlob = await readFromBlob();
+      if (fromBlob) return fromBlob;
+
+      const seeded = await seedDatabase();
+      await writeToBlob(seeded);
+      return seeded;
+    }
 
     const fromLocal = await readLocalFile();
     if (fromLocal) return fromLocal;
 
     const seeded = await seedDatabase();
-    await safePersist(seeded);
+    await writeLocalFile(seeded);
     return seeded;
   } catch (error) {
     console.error("[db] readDb error:", error);
@@ -145,9 +158,18 @@ export async function readDb(): Promise<Database> {
 
 export async function writeDb(data: Database): Promise<void> {
   const normalized = normalizeDb(data);
-  const blobOk = await writeToBlob(normalized);
-  if (!blobOk) {
-    await writeLocalFile(normalized);
+
+  if (canUseBlob()) {
+    const blobOk = await writeToBlob(normalized);
+    if (!blobOk) {
+      throw new Error("فشل الحفظ على التخزين الدائم");
+    }
+    return;
+  }
+
+  const localOk = await writeLocalFile(normalized);
+  if (!localOk) {
+    throw new Error("فشل الحفظ محلياً");
   }
 }
 
@@ -165,6 +187,7 @@ export async function testBlobStorage(): Promise<{
   ok: boolean;
   canRead: boolean;
   canWrite: boolean;
+  hasData: boolean;
   error?: string;
 }> {
   if (!canUseBlob()) {
@@ -172,32 +195,42 @@ export async function testBlobStorage(): Promise<{
       ok: false,
       canRead: false,
       canWrite: false,
+      hasData: false,
       error: "Blob غير مفعّل — فعّلي BLOB_READ_WRITE_TOKEN على Production",
     };
   }
 
   try {
-    const sample = await seedDatabase();
-    const wrote = await writeToBlob(sample);
-    if (!wrote) {
+    const existing = await readFromBlob();
+
+    if (existing) {
       return {
-        ok: false,
-        canRead: false,
-        canWrite: false,
-        error: "فشل الكتابة على Blob",
+        ok: true,
+        canRead: true,
+        canWrite: true,
+        hasData: true,
       };
     }
-    const reread = await readFromBlob();
+
+    await put("ssa-law/.health-check", "ok", {
+      access: "private",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      ...getBlobOptions(),
+    });
+
     return {
-      ok: Boolean(reread),
-      canRead: Boolean(reread),
-      canWrite: wrote,
+      ok: true,
+      canRead: false,
+      canWrite: true,
+      hasData: false,
     };
   } catch (error) {
     return {
       ok: false,
       canRead: false,
       canWrite: false,
+      hasData: false,
       error: error instanceof Error ? error.message : String(error),
     };
   }

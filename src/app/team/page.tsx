@@ -3,6 +3,8 @@ import { PageHero } from "@/components/layout/PageHero";
 import { TeamOrgChart } from "@/components/team/TeamOrgChart";
 import { getTeamStructure } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "فريق العمل",
   description:

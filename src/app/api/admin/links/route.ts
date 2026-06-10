@@ -44,6 +44,7 @@ export async function PUT(request: Request) {
       const idx = db.importantLinks.findIndex((l) => l.id === link.id);
       if (idx >= 0) db.importantLinks[idx] = link;
     });
+    revalidateSiteContent();
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "فشل التحديث" }, { status: 500 });

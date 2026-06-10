@@ -27,14 +27,19 @@ export function WhatsAppLink({
       <span className="w-9 h-9 rounded-full bg-[#25D366]/15 group-hover:bg-[#25D366] flex items-center justify-center transition-colors shrink-0">
         <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-white transition-colors" />
       </span>
-      {showNumber !== "never" && (
-        <span
-          className={`text-sm ${showNumber === "desktop" ? "hidden sm:inline" : ""}`}
-          dir="ltr"
-        >
-          {display}
-        </span>
-      )}
+      <span className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-2">
+        {label && (
+          <span className="text-cream/50 text-xs sm:text-sm">{label}</span>
+        )}
+        {showNumber !== "never" && (
+          <span
+            className={`text-sm ${showNumber === "desktop" ? "hidden sm:inline" : ""}`}
+            dir="ltr"
+          >
+            {label ? phone : display}
+          </span>
+        )}
+      </span>
     </a>
   );
 }

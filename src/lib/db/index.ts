@@ -42,6 +42,7 @@ function normalizeDb(data: Database): Database {
     contactSubmissions: data.contactSubmissions ?? [],
     bookingSubmissions: data.bookingSubmissions ?? [],
     visitorCount: data.visitorCount ?? 500,
+    adminPasswordHash: data.adminPasswordHash,
   };
 }
 

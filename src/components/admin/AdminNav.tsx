@@ -7,6 +7,7 @@ import {
   Users,
   Link2,
   Inbox,
+  Settings,
   LogOut,
 } from "lucide-react";
 
@@ -15,6 +16,7 @@ const links = [
   { href: "/admin/team", label: "فريق العمل", icon: Users },
   { href: "/admin/links", label: "روابط هامة", icon: Link2 },
   { href: "/admin/submissions", label: "الطلبات", icon: Inbox },
+  { href: "/admin/settings", label: "كلمة المرور", icon: Settings },
 ];
 
 export function AdminNav() {

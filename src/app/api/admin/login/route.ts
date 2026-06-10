@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   try {
     const { password } = await request.json();
 
-    if (!password || !verifyPassword(password)) {
+    if (!password || !(await verifyPassword(password))) {
       return NextResponse.json(
         { error: "كلمة المرور غير صحيحة" },
         { status: 401 }

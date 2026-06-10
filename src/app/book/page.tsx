@@ -50,7 +50,8 @@ export default function BookPage() {
                   تواصل مباشرة عبر واتساب
                 </p>
                 <WhatsAppLink
-                  phone={siteConfig.contact.mobile}
+                  phone={siteConfig.contact.mobiles[0]}
+                  label="جوال"
                   className="text-gold"
                   showNumber="always"
                 />

@@ -38,4 +38,5 @@ export interface Database {
   contactSubmissions: ContactSubmission[];
   bookingSubmissions: BookingSubmission[];
   visitorCount: number;
+  adminPasswordHash?: string;
 }

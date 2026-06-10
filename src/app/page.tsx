@@ -249,7 +249,8 @@ export default async function HomePage() {
               احجز استشارة
             </Button>
             <WhatsAppLink
-              phone={siteConfig.contact.mobile}
+              phone={siteConfig.contact.mobiles[0]}
+              label="جوال"
               className="text-cream border border-gold/30 rounded-sm px-6 py-3 hover:border-[#25D366]"
               showNumber="always"
             />

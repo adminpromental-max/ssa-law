@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Mail, MapPin, Printer, Clock } from "lucide-react";
+import { Mail, MapPin, Clock } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
-import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { MobileWhatsAppList } from "@/components/ui/MobileWhatsAppList";
 import { siteConfig } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -37,33 +37,10 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div>
-                  <p className="text-cream/50 text-sm mb-2">الهاتف</p>
-                  <WhatsAppLink
-                    phone={siteConfig.contact.phone}
-                    className="text-cream"
-                  />
-                </div>
-
-                <div>
-                  <p className="text-cream/50 text-sm mb-2">الجوال</p>
-                  <WhatsAppLink
-                    phone={siteConfig.contact.mobile}
-                    className="text-cream"
-                  />
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-sm bg-gold/10 flex items-center justify-center shrink-0">
-                    <Printer className="w-5 h-5 text-gold" />
-                  </div>
-                  <div>
-                    <p className="text-cream/50 text-sm mb-1">الفاكس</p>
-                    <p className="text-cream" dir="ltr">
-                      {siteConfig.contact.fax}
-                    </p>
-                  </div>
-                </div>
+                <MobileWhatsAppList
+                  linkClassName="text-cream"
+                  showNumber="always"
+                />
 
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-sm bg-gold/10 flex items-center justify-center shrink-0">
@@ -104,12 +81,13 @@ export default function ContactPage() {
             </div>
 
             <div className="lg:col-span-2">
-              <div className="bg-black-light border border-gold/10 rounded-sm p-8 md:p-10">
+              <div className="card-elevated rounded-sm p-8 md:p-10">
                 <h2 className="text-2xl font-bold text-cream mb-2 leading-snug">
                   أرسل لنا رسالة
                 </h2>
                 <p className="text-cream/60 text-sm mb-8">
-                  املأ النموذج وسيتواصل معك فريق المكتب في أقرب وقت
+                  املأ النموذج وسيتواصل معك فريق المكتب في أقرب وقت. الطلبات
+                  تصل أيضاً إلى لوحة التحكم.
                 </p>
                 <ContactForm />
               </div>

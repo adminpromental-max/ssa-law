@@ -2,29 +2,39 @@ import {
   ArrowLeft,
   Shield,
   Award,
-  Users,
   CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { HeroNamePlate } from "@/components/ui/HeroNamePlate";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { ServiceCard } from "@/components/ui/ServiceCard";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { VisitorCounter } from "@/components/ui/VisitorCounter";
+import { StatsBanner } from "@/components/sections/StatsBanner";
+import { ServicesSlider } from "@/components/sections/ServicesSlider";
+import { ClientsSlider } from "@/components/sections/ClientsSlider";
 import { ImportantLinks } from "@/components/sections/ImportantLinks";
 import { TeamOrgChart } from "@/components/team/TeamOrgChart";
 import { getServices, getTeamStructure } from "@/lib/content";
+import { readDb } from "@/lib/db";
 import { clients } from "@/data/clients";
-import { siteConfig, values, stats } from "@/data/site";
+import { siteConfig, values } from "@/data/site";
 
 export const dynamic = "force-dynamic";
 
+const CASES_BASE = 1000;
+const REQUESTS_BASE = 250;
+
 export default async function HomePage() {
-  const [services, teamStructure] = await Promise.all([
+  const [services, teamStructure, db] = await Promise.all([
     getServices(),
     getTeamStructure(),
+    readDb(),
   ]);
+
+  const requestsCount =
+    REQUESTS_BASE +
+    db.contactSubmissions.length +
+    db.bookingSubmissions.length;
 
   return (
     <>
@@ -67,28 +77,18 @@ export default async function HomePage() {
                 >
                   خدماتنا
                 </Button>
-                <VisitorCounter />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-12 sm:py-16 section-warm border-y border-gold/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center px-2">
-                <p className="text-3xl md:text-4xl font-bold gold-text-gradient mb-2">
-                  {stat.value}
-                </p>
-                <p className="text-cream/60 text-sm leading-snug">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <StatsBanner
+        servicesCount={services.length}
+        casesBase={CASES_BASE}
+        requestsCount={requestsCount}
+        initialVisitors={db.visitorCount}
+      />
 
       {/* About snippet */}
       <section className="py-16 sm:py-24 section-deep">
@@ -139,24 +139,14 @@ export default async function HomePage() {
       </section>
 
       {/* Services */}
-      <section className="py-16 sm:py-24 section-soft section-pattern">
+      <section className="py-16 sm:py-24 section-services-light section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subtitle="خدماتنا"
             title="مجالات الخدمات القانونية"
             description="نقدم حزمة متكاملة من الخدمات القانونية تغطي جميع احتياجاتكم"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => (
-              <ScrollReveal
-                key={service.slug}
-                variant={index % 2 === 0 ? "slide-right" : "slide-left"}
-                delay={index * 80}
-              >
-                <ServiceCard {...service} goldFrame />
-              </ScrollReveal>
-            ))}
-          </div>
+          <ServicesSlider services={services} />
           <div className="text-center mt-12">
             <Button href="/services" variant="outline">
               عرض جميع الخدمات
@@ -175,24 +165,7 @@ export default async function HomePage() {
             title="جهات اعتمدت على خدماتنا"
             description="اكتسبنا ثقة العديد من الجهات الرسمية والشركات الوطنية الرائدة"
           />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {clients.map((client) => (
-              <div
-                key={client.shortName}
-                className="card-elevated rounded-sm p-8 text-center hover:border-gold/30 transition-colors"
-              >
-                <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-8 h-8 text-gold" />
-                </div>
-                <h3 className="text-cream font-bold mb-2 leading-snug">
-                  {client.shortName}
-                </h3>
-                <p className="text-cream/50 text-sm leading-relaxed">
-                  {client.name}
-                </p>
-              </div>
-            ))}
-          </div>
+          <ClientsSlider clients={clients} />
         </div>
       </section>
 

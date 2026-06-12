@@ -48,9 +48,3 @@ export const values = [
   },
 ];
 
-export const stats = [
-  { value: "6+", label: "مجالات خدمات رئيسية" },
-  { value: "5", label: "خبراء قانونيون" },
-  { value: "3+", label: "جهات معتمدة" },
-  { value: "36/419", label: "رقم الترخيص" },
-];

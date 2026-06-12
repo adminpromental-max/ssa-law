@@ -540,8 +540,34 @@ html[dir="rtl"] .clients-marquee-track {
 }
 
 .carousel-services,
-.carousel-clients {
+.carousel-clients,
+.carousel-articles {
   padding-inline: 2rem;
+}
+
+.article-card-image {
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  background: var(--color-warm-850);
+}
+
+.article-card-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 55%,
+    rgba(20, 18, 16, 0.45) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.article-card:hover .article-card-image-overlay {
+  opacity: 1;
+}
+
+.article-card:hover .article-card-image {
+  border-color: rgba(201, 162, 39, 0.45);
 }
 
 .client-logo-card {

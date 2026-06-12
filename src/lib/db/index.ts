@@ -3,27 +3,15 @@ import path from "path";
 import { get, put, list, BlobNotFoundError } from "@vercel/blob";
 import { createSeedDatabase } from "./seed";
 import type { Database } from "./types";
+import { canUseBlob as checkBlob, getBlobOptions } from "./blob";
 
 const BLOB_PATHNAME = "ssa-law/database.json";
 
 export function canUseBlob(): boolean {
-  return Boolean(
-    process.env.BLOB_READ_WRITE_TOKEN ||
-      (process.env.BLOB_STORE_ID && process.env.VERCEL)
-  );
+  return checkBlob();
 }
-
 export function hasBlobStorage(): boolean {
-  return canUseBlob();
-}
-
-function getBlobOptions() {
-  const options: { storeId?: string; token?: string } = {};
-  if (process.env.BLOB_STORE_ID) options.storeId = process.env.BLOB_STORE_ID;
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    options.token = process.env.BLOB_READ_WRITE_TOKEN;
-  }
-  return options;
+  return checkBlob();
 }
 
 function getLocalDbPath(): string {
@@ -34,11 +22,28 @@ function getSeedPath(): string {
   return path.join(process.cwd(), "data", "database.seed.json");
 }
 
-function normalizeDb(data: Database): Database {
+function normalizeDb(data: Partial<Database>): Database {
+  const seed = createSeedDatabase();
   return {
-    team: data.team ?? createSeedDatabase().team,
-    services: data.services ?? createSeedDatabase().services,
-    importantLinks: data.importantLinks ?? [],
+    team: data.team ?? seed.team,
+    services: data.services?.length ? data.services : seed.services,
+    importantLinks: data.importantLinks ?? seed.importantLinks,
+    clients: data.clients?.length ? data.clients : seed.clients,
+    articles: data.articles?.length ? data.articles : seed.articles,
+    siteSettings: { ...seed.siteSettings, ...(data.siteSettings ?? {}) },
+    homepage: {
+      ...seed.homepage,
+      ...(data.homepage ?? {}),
+      values: data.homepage?.values?.length
+        ? data.homepage.values
+        : seed.homepage.values,
+      aboutParagraphs: data.homepage?.aboutParagraphs?.length
+        ? data.homepage.aboutParagraphs
+        : seed.homepage.aboutParagraphs,
+      whyUsItems: data.homepage?.whyUsItems?.length
+        ? data.homepage.whyUsItems
+        : seed.homepage.whyUsItems,
+    },
     contactSubmissions: data.contactSubmissions ?? [],
     bookingSubmissions: data.bookingSubmissions ?? [],
     visitorCount: data.visitorCount ?? 500,

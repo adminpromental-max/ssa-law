@@ -6,4 +6,7 @@ export function revalidateSiteContent() {
   revalidatePath("/team");
   revalidatePath("/services");
   revalidatePath("/contact");
+  revalidatePath("/about");
+  revalidatePath("/clients");
+  revalidatePath("/articles");
 }

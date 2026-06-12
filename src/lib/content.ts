@@ -3,9 +3,21 @@ import { readDb } from "@/lib/db";
 import { teamStructure as defaultTeamStructure } from "@/data/team";
 import { services as staticServices } from "@/data/services";
 import { importantLinks as staticLinks } from "@/data/links";
+import {
+  createDefaultSiteSettings,
+  createDefaultHomepageContent,
+  createDefaultClients,
+  createDefaultArticles,
+} from "@/lib/db/defaults";
 import type { TeamMember, TeamStructure } from "@/data/team";
 import type { Service } from "@/data/services";
-import type { ImportantLink } from "@/lib/db/types";
+import type {
+  ImportantLink,
+  SiteSettings,
+  HomepageContent,
+  ClientRecord,
+  ArticleRecord,
+} from "@/lib/db/types";
 
 function mergeMember(
   member: TeamMember,
@@ -63,7 +75,7 @@ export async function getServices(): Promise<Service[]> {
   noStore();
   try {
     const db = await readDb();
-    return db.services;
+    return db.services?.length ? db.services : staticServices;
   } catch {
     return staticServices;
   }
@@ -83,6 +95,62 @@ export async function getImportantLinks(): Promise<ImportantLink[]> {
   }
 }
 
+export async function getSiteSettings(): Promise<SiteSettings> {
+  noStore();
+  try {
+    const db = await readDb();
+    return { ...createDefaultSiteSettings(), ...db.siteSettings };
+  } catch {
+    return createDefaultSiteSettings();
+  }
+}
+
+export async function getHomepageContent(): Promise<HomepageContent> {
+  noStore();
+  const defaults = createDefaultHomepageContent();
+  try {
+    const db = await readDb();
+    const hp = db.homepage;
+    if (!hp) return defaults;
+    return {
+      ...defaults,
+      ...hp,
+      values: hp.values?.length ? hp.values : defaults.values,
+      aboutParagraphs: hp.aboutParagraphs?.length
+        ? hp.aboutParagraphs
+        : defaults.aboutParagraphs,
+      whyUsItems: hp.whyUsItems?.length ? hp.whyUsItems : defaults.whyUsItems,
+    };
+  } catch {
+    return defaults;
+  }
+}
+
+export async function getClients(): Promise<ClientRecord[]> {
+  noStore();
+  try {
+    const db = await readDb();
+    return db.clients?.length ? db.clients : createDefaultClients();
+  } catch {
+    return createDefaultClients();
+  }
+}
+
+export async function getArticles(): Promise<ArticleRecord[]> {
+  noStore();
+  try {
+    const db = await readDb();
+    return db.articles?.length ? db.articles : createDefaultArticles();
+  } catch {
+    return createDefaultArticles();
+  }
+}
+
+export async function getLatestArticles(limit = 3): Promise<ArticleRecord[]> {
+  const articles = await getArticles();
+  return articles.slice(0, limit);
+}
+
 export async function getVisitorCount(): Promise<number> {
   noStore();
   try {
@@ -90,5 +158,32 @@ export async function getVisitorCount(): Promise<number> {
     return db.visitorCount;
   } catch {
     return 500;
+  }
+}
+
+export async function getStatsCounts(): Promise<{
+  casesBase: number;
+  requestsBase: number;
+  requestsCount: number;
+}> {
+  noStore();
+  try {
+    const db = await readDb();
+    const settings = { ...createDefaultSiteSettings(), ...db.siteSettings };
+    return {
+      casesBase: settings.casesBase,
+      requestsBase: settings.requestsBase,
+      requestsCount:
+        settings.requestsBase +
+        db.contactSubmissions.length +
+        db.bookingSubmissions.length,
+    };
+  } catch {
+    const settings = createDefaultSiteSettings();
+    return {
+      casesBase: settings.casesBase,
+      requestsBase: settings.requestsBase,
+      requestsCount: settings.requestsBase,
+    };
   }
 }

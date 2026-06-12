@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import type { Client } from "@/data/clients";
+import type { ClientRecord } from "@/lib/db/types";
 
 interface ClientsMarqueeProps {
-  clients: Client[];
+  clients: ClientRecord[];
 }
 
 export function ClientsMarquee({ clients }: ClientsMarqueeProps) {

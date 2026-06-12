@@ -5,9 +5,15 @@ import type { TeamMember } from "@/data/team";
 
 interface TeamLeaderPreviewProps {
   leader: TeamMember;
+  heading?: string;
+  leaderLine?: string;
 }
 
-export function TeamLeaderPreview({ leader }: TeamLeaderPreviewProps) {
+export function TeamLeaderPreview({
+  leader,
+  heading = "فريق عمل مؤهل بخبرة كبيرة في مجال القانون بشتى مجالاته",
+  leaderLine = "تحت قيادة المحامي: صالح بن سلمان العمري",
+}: TeamLeaderPreviewProps) {
   const imageSrc = leader.image ?? "/images/team/saleh-al-amri.png";
 
   return (
@@ -17,7 +23,7 @@ export function TeamLeaderPreview({ leader }: TeamLeaderPreviewProps) {
           {/* Text — right side in RTL */}
           <div className="text-center lg:text-start order-1">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black/85 leading-snug mb-5">
-              فريق عمل مؤهل بخبرة كبيرة في مجال القانون بشتى مجالاته
+              {heading}
             </h2>
 
             <div className="flex justify-center lg:justify-start mb-6">
@@ -28,7 +34,7 @@ export function TeamLeaderPreview({ leader }: TeamLeaderPreviewProps) {
             </div>
 
             <p className="text-gold-dark font-bold text-base sm:text-lg mb-5">
-              تحت قيادة المحامي: صالح بن سلمان العمري
+              {leaderLine}
             </p>
 
             <div className="space-y-4 text-black/65 text-sm sm:text-base leading-relaxed text-justify max-w-xl mx-auto lg:mx-0">

@@ -5,16 +5,20 @@ interface MobileWhatsAppListProps {
   className?: string;
   showNumber?: "always" | "desktop" | "never";
   linkClassName?: string;
+  phones?: string[];
 }
 
 export function MobileWhatsAppList({
   className = "",
   showNumber = "desktop",
   linkClassName = "",
+  phones,
 }: MobileWhatsAppListProps) {
+  const list = phones?.length ? phones : siteConfig.contact.mobiles;
+
   return (
     <div className={`space-y-4 ${className}`}>
-      {siteConfig.contact.mobiles.map((phone) => (
+      {list.map((phone) => (
         <div key={phone}>
           <p className="text-cream/50 text-sm mb-2">جوال</p>
           <WhatsAppLink

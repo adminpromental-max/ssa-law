@@ -123,59 +123,289 @@ body {
   );
 }
 
-.section-stats-bridge {
+.section-footer {
   background: linear-gradient(
     180deg,
-    #ddd4c4 0%,
-    #d4cbb8 35%,
-    #c9bfb0 70%,
-    #2a2520 100%
+    var(--color-warm-800) 0%,
+    #3a332c 45%,
+    #454038 100%
   );
 }
 
-.section-services-light {
+/* Image banners */
+.banner-image-section {
+  position: relative;
+  min-height: 200px;
+}
+
+.banner-image-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.banner-image-overlay-stats {
   background: linear-gradient(
     180deg,
-    #2a2520 0%,
-    #322c26 30%,
-    #3a332c 100%
+    rgba(20, 18, 16, 0.55) 0%,
+    rgba(20, 18, 16, 0.78) 100%
   );
 }
 
-.stat-card {
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(201, 162, 39, 0.2);
-  backdrop-filter: blur(6px);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
+.banner-image-overlay-services {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 22, 35, 0.82) 0%,
+    rgba(20, 28, 42, 0.88) 100%
+  );
 }
 
-.stat-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(201, 162, 39, 0.4);
-  box-shadow: 0 8px 24px rgba(168, 134, 30, 0.12);
+.banner-image-overlay-clients {
+  background: linear-gradient(
+    90deg,
+    rgba(14, 12, 10, 0.88) 0%,
+    rgba(20, 18, 16, 0.72) 50%,
+    rgba(14, 12, 10, 0.88) 100%
+  );
 }
 
-.stat-icon-wrap {
+.banner-stat-icon {
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    145deg,
-    rgba(201, 162, 39, 0.22) 0%,
-    rgba(201, 162, 39, 0.08) 100%
-  );
-  border: 1.5px solid rgba(201, 162, 39, 0.35);
-  transition: transform 0.3s ease;
+  color: var(--color-gold-light);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.stat-card:hover .stat-icon-wrap {
-  transform: scale(1.08);
+/* Services bar */
+.services-bar {
+  min-height: 180px;
+}
+
+.services-bar-scroll {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.services-bar-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.services-bar-track {
+  display: flex;
+  min-width: min-content;
+}
+
+@media (min-width: 1024px) {
+  .services-bar-track {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    width: 100%;
+    min-width: unset;
+  }
+
+  .services-bar-scroll {
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+}
+
+.service-bar-item {
+  position: relative;
+  flex: 0 0 72%;
+  min-height: 180px;
+  padding: 1.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.12);
+  scroll-snap-align: start;
+  transition: background 0.35s ease;
+}
+
+@media (min-width: 640px) {
+  .service-bar-item {
+    flex-basis: 45%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .service-bar-item {
+    flex: unset;
+    min-height: 200px;
+  }
+}
+
+.service-bar-item:first-child {
+  border-inline-start: none;
+}
+
+.service-bar-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.service-bar-default {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.service-bar-hover {
+  position: absolute;
+  inset: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.service-bar-divider {
+  width: 2rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.35);
+  margin: 0.5rem 0;
+}
+
+.service-bar-arrow {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+@media (hover: hover) {
+  .service-bar-item:hover .service-bar-default {
+    opacity: 0;
+  }
+
+  .service-bar-item:hover .service-bar-hover {
+    opacity: 1;
+  }
+}
+
+/* Clients marquee */
+.clients-marquee-title {
+  position: relative;
+  padding-inline-end: 1.5rem;
+}
+
+.clients-marquee-title::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  inset-inline-end: 0;
+  width: 1px;
+  height: 3rem;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.clients-marquee-viewport {
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.clients-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: max-content;
+  animation: clients-marquee 35s linear infinite;
+}
+
+.clients-marquee-viewport:hover .clients-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes clients-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+html[dir="rtl"] .clients-marquee-track {
+  animation-name: clients-marquee-rtl;
+}
+
+@keyframes clients-marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
+}
+
+.client-marquee-item {
+  position: relative;
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+}
+
+.client-marquee-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  min-height: 56px;
+}
+
+.client-marquee-initials {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.82);
+  transition: opacity 0.3s ease;
+}
+
+.client-marquee-tooltip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 0.375rem;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .client-marquee-item:hover .client-marquee-initials,
+  .client-marquee-item:hover .client-marquee-logo img {
+    opacity: 0;
+  }
+
+  .client-marquee-item:hover .client-marquee-tooltip {
+    opacity: 1;
+  }
 }
 
 .service-icon-ring {

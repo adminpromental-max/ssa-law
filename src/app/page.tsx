@@ -10,12 +10,13 @@ import { HeroNamePlate } from "@/components/ui/HeroNamePlate";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { StatsBanner } from "@/components/sections/StatsBanner";
-import { ServicesSlider } from "@/components/sections/ServicesSlider";
-import { ClientsSlider } from "@/components/sections/ClientsSlider";
+import { ServicesBar } from "@/components/sections/ServicesBar";
+import { ClientsMarquee } from "@/components/sections/ClientsMarquee";
 import { ImportantLinks } from "@/components/sections/ImportantLinks";
 import { TeamOrgChart } from "@/components/team/TeamOrgChart";
 import { getServices, getTeamStructure } from "@/lib/content";
 import { readDb } from "@/lib/db";
+import { getOfficeExperienceYears } from "@/lib/experience";
 import { clients } from "@/data/clients";
 import { siteConfig, values } from "@/data/site";
 
@@ -84,8 +85,8 @@ export default async function HomePage() {
       </section>
 
       <StatsBanner
-        servicesCount={services.length}
         casesBase={CASES_BASE}
+        experienceYears={getOfficeExperienceYears()}
         requestsCount={requestsCount}
         initialVisitors={db.visitorCount}
       />
@@ -139,35 +140,25 @@ export default async function HomePage() {
       </section>
 
       {/* Services */}
-      <section className="py-16 sm:py-24 section-services-light section-pattern">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 section-deep">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <SectionHeading
             subtitle="خدماتنا"
             title="مجالات الخدمات القانونية"
-            description="نقدم حزمة متكاملة من الخدمات القانونية تغطي جميع احتياجاتكم"
+            description="مرر على أي مجال لمعرفة المزيد — أو اضغط للتفاصيل"
           />
-          <ServicesSlider services={services} />
-          <div className="text-center mt-12">
-            <Button href="/services" variant="outline">
-              عرض جميع الخدمات
-            </Button>
-          </div>
+        </div>
+        <ServicesBar services={services} />
+        <div className="text-center mt-10 px-4">
+          <Button href="/services" variant="outline">
+            عرض جميع الخدمات
+          </Button>
         </div>
       </section>
 
       <ImportantLinks />
 
-      {/* Clients */}
-      <section className="py-16 sm:py-24 section-warm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            subtitle="ثقة عملائنا"
-            title="جهات اعتمدت على خدماتنا"
-            description="اكتسبنا ثقة العديد من الجهات الرسمية والشركات الوطنية الرائدة"
-          />
-          <ClientsSlider clients={clients} />
-        </div>
-      </section>
+      <ClientsMarquee clients={clients} />
 
       {/* Team preview */}
       <section className="py-16 sm:py-24 section-accent section-pattern">

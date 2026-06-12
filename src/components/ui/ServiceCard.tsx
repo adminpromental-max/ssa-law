@@ -1,23 +1,6 @@
 import Link from "next/link";
-import {
-  Scale,
-  FileText,
-  Gavel,
-  Building2,
-  Stamp,
-  Briefcase,
-  ArrowLeft,
-  type LucideIcon,
-} from "lucide-react";
-
-const iconMap: Record<string, LucideIcon> = {
-  Scale,
-  FileText,
-  Gavel,
-  Building2,
-  Stamp,
-  Briefcase,
-};
+import { ArrowLeft } from "lucide-react";
+import { getServiceIcon } from "@/lib/serviceIcons";
 
 interface ServiceCardProps {
   slug: string;
@@ -36,7 +19,7 @@ export function ServiceCard({
   goldFrame = false,
   compact = false,
 }: ServiceCardProps) {
-  const Icon = iconMap[icon] || Scale;
+  const Icon = getServiceIcon(icon);
 
   return (
     <Link

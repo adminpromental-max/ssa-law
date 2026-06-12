@@ -3,6 +3,7 @@ export interface Client {
   shortName: string;
   description: string;
   initials: string;
+  logo?: string;
 }
 
 export const clients: Client[] = [

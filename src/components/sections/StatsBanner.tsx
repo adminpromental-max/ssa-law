@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   Gavel,
-  Layers,
+  Calendar,
   Eye,
   ClipboardList,
   type LucideIcon,
@@ -11,29 +12,27 @@ import {
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 
 interface StatsBannerProps {
-  servicesCount: number;
   casesBase: number;
+  experienceYears: number;
   requestsCount: number;
   initialVisitors: number;
 }
 
 const statItems: {
-  key: keyof Pick<
-    StatsBannerProps,
-    "servicesCount" | "casesBase" | "requestsCount"
-  > | "visitors";
+  key: string;
   label: string;
+  suffix?: string;
   icon: LucideIcon;
 }[] = [
   { key: "casesBase", label: "عدد القضايا", icon: Gavel },
-  { key: "servicesCount", label: "عدد الخدمات", icon: Layers },
+  { key: "experienceYears", label: "سنوات الخبرة", icon: Calendar },
   { key: "visitors", label: "عدد الزوار", icon: Eye },
   { key: "requestsCount", label: "عدد الطلبات", icon: ClipboardList },
 ];
 
 export function StatsBanner({
-  servicesCount,
   casesBase,
+  experienceYears,
   requestsCount,
   initialVisitors,
 }: StatsBannerProps) {
@@ -64,27 +63,37 @@ export function StatsBanner({
 
   const values: Record<string, number> = {
     casesBase,
-    servicesCount,
+    experienceYears,
     visitors,
     requestsCount,
   };
 
   return (
-    <section className="section-stats-bridge py-10 sm:py-14 border-y border-gold/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    <section className="banner-image-section relative overflow-hidden">
+      <Image
+        src="/images/stats-bg.jpg"
+        alt=""
+        fill
+        className="object-cover object-center"
+        sizes="100vw"
+        priority
+      />
+      <div className="banner-image-overlay banner-image-overlay-stats" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {statItems.map(({ key, label, icon: Icon }) => (
             <div
               key={key}
-              className="stat-card group flex flex-col items-center text-center px-3 py-5 sm:py-6 rounded-sm"
+              className="flex flex-col items-center text-center px-2"
             >
-              <div className="stat-icon-wrap mb-3 sm:mb-4">
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-gold-dark" />
+              <div className="banner-stat-icon mb-3">
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
               </div>
-              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-gold-dark mb-1.5 tabular-nums">
-                <AnimatedCounter value={values[key]} />
+              <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 tabular-nums leading-none">
+                <AnimatedCounter value={values[key]} className="text-white" />
               </p>
-              <p className="text-black/55 text-xs sm:text-sm leading-snug">
+              <p className="text-white/75 text-xs sm:text-sm leading-snug">
                 {label}
               </p>
             </div>

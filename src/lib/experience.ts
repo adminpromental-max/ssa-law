@@ -1,3 +1,17 @@
+const FOUNDED_HIJRI_YEAR = 1436;
+
+/** سنوات خبرة المكتب منذ تأسيسه عام 1436 هـ */
+export function getOfficeExperienceYears(
+  foundedHijriYear = FOUNDED_HIJRI_YEAR
+): number {
+  const now = new Date();
+  const currentHijriYear = parseInt(
+    new Intl.DateTimeFormat("en-u-ca-islamic", { year: "numeric" }).format(now),
+    10
+  );
+  return Math.max(currentHijriYear - foundedHijriYear, 1);
+}
+
 export function getExperienceYears(hireDate: string): number {
   const start = new Date(hireDate);
   const now = new Date();

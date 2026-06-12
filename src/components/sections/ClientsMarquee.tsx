@@ -13,7 +13,7 @@ export function ClientsMarquee({ clients }: ClientsMarqueeProps) {
   return (
     <section className="banner-image-section clients-marquee relative overflow-hidden">
       <Image
-        src="/images/clients-bg.jpg"
+        src="/images/clients-bg.png"
         alt=""
         fill
         className="object-cover object-center"
@@ -35,12 +35,11 @@ export function ClientsMarquee({ clients }: ClientsMarqueeProps) {
               >
                 <div className="client-marquee-logo">
                   {client.logo ? (
-                    <Image
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
                       src={client.logo}
                       alt={client.shortName}
-                      width={140}
-                      height={56}
-                      className="h-10 sm:h-12 w-auto object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity"
+                      className="h-10 sm:h-12 w-auto max-w-[140px] object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity"
                     />
                   ) : (
                     <span className="client-marquee-initials">

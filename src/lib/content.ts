@@ -1,19 +1,61 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { readDb } from "@/lib/db";
-import { teamStructure } from "@/data/team";
+import { teamStructure as defaultTeamStructure } from "@/data/team";
 import { services as staticServices } from "@/data/services";
 import { importantLinks as staticLinks } from "@/data/links";
-import type { TeamStructure } from "@/data/team";
+import type { TeamMember, TeamStructure } from "@/data/team";
 import type { Service } from "@/data/services";
 import type { ImportantLink } from "@/lib/db/types";
+
+function mergeMember(
+  member: TeamMember,
+  fallback?: TeamMember
+): TeamMember {
+  if (!fallback) return member;
+  return {
+    ...fallback,
+    ...member,
+    image: member.image ?? fallback.image,
+    bio: member.bio ?? fallback.bio,
+    qualifications: member.qualifications ?? fallback.qualifications,
+  };
+}
+
+function mergeTeamStructure(
+  dbTeam: TeamStructure,
+  defaults: TeamStructure
+): TeamStructure {
+  const defaultMembers = new Map<string, TeamMember>();
+  defaultMembers.set(defaults.generalManager.id, defaults.generalManager);
+  defaultMembers.set(defaults.officeManager.id, defaults.officeManager);
+  for (const dept of defaults.departments) {
+    for (const member of dept.members) {
+      defaultMembers.set(member.id, member);
+    }
+  }
+
+  return {
+    generalManager: mergeMember(
+      dbTeam.generalManager,
+      defaults.generalManager
+    ),
+    officeManager: mergeMember(dbTeam.officeManager, defaults.officeManager),
+    departments: dbTeam.departments.map((dept) => ({
+      ...dept,
+      members: dept.members.map((member) =>
+        mergeMember(member, defaultMembers.get(member.id))
+      ),
+    })),
+  };
+}
 
 export async function getTeamStructure(): Promise<TeamStructure> {
   noStore();
   try {
     const db = await readDb();
-    return db.team;
+    return mergeTeamStructure(db.team, defaultTeamStructure);
   } catch {
-    return teamStructure;
+    return defaultTeamStructure;
   }
 }
 

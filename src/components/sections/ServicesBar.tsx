@@ -14,7 +14,7 @@ export function ServicesBar({ services }: ServicesBarProps) {
   return (
     <div className="services-bar relative overflow-hidden">
       <Image
-        src="/images/services-bg.jpg"
+        src="/images/services-bg.png"
         alt=""
         fill
         className="object-cover object-center"

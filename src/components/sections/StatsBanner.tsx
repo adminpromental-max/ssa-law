@@ -71,7 +71,7 @@ export function StatsBanner({
   return (
     <section className="banner-image-section relative overflow-hidden">
       <Image
-        src="/images/stats-bg.jpg"
+        src="/images/stats-bg.png"
         alt=""
         fill
         className="object-cover object-center"

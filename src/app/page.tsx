@@ -12,8 +12,8 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { StatsBanner } from "@/components/sections/StatsBanner";
 import { ServicesBar } from "@/components/sections/ServicesBar";
 import { ClientsMarquee } from "@/components/sections/ClientsMarquee";
+import { TeamLeaderPreview } from "@/components/sections/TeamLeaderPreview";
 import { ImportantLinks } from "@/components/sections/ImportantLinks";
-import { TeamOrgChart } from "@/components/team/TeamOrgChart";
 import { getServices, getTeamStructure } from "@/lib/content";
 import { readDb } from "@/lib/db";
 import { getOfficeExperienceYears } from "@/lib/experience";
@@ -160,22 +160,7 @@ export default async function HomePage() {
 
       <ClientsMarquee clients={clients} />
 
-      {/* Team preview */}
-      <section className="py-16 sm:py-24 section-accent section-pattern">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            subtitle="فريق العمل"
-            title="الهيكل الإداري للمكتب"
-            description="فريق عمل مؤهل بخبرة كبيرة في مجال القانون بشتى مجالاته"
-          />
-          <TeamOrgChart structure={teamStructure} compact />
-          <div className="text-center mt-12">
-            <Button href="/team" variant="outline">
-              تعرف على الفريق بالكامل
-            </Button>
-          </div>
-        </div>
-      </section>
+      <TeamLeaderPreview leader={teamStructure.generalManager} />
 
       {/* Why us */}
       <section className="py-24 section-deep section-pattern">

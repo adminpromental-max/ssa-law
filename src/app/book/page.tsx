@@ -38,9 +38,9 @@ export default function BookPage() {
                 <Clock className="w-8 h-8 text-gold mb-4" />
                 <h3 className="text-cream font-bold mb-2">أوقات العمل</h3>
                 <p className="text-cream/60 text-sm leading-relaxed">
-                  الأحد — الخميس
+                  {siteConfig.workingHours.days}
                   <br />
-                  8:00 صباحاً — 5:00 مساءً
+                  <span dir="ltr">{siteConfig.workingHours.hours}</span>
                 </p>
               </div>
 
@@ -50,7 +50,7 @@ export default function BookPage() {
                   تواصل مباشرة عبر واتساب
                 </p>
                 <WhatsAppLink
-                  phone={siteConfig.contact.mobiles[0]}
+                  phone={siteConfig.contact.phone}
                   label="جوال"
                   className="text-gold"
                   showNumber="always"

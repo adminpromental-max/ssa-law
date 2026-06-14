@@ -73,11 +73,10 @@ export default function AdminSitePage() {
           <h2 className="text-gold font-bold">التواصل</h2>
           <AdminField label="العنوان" value={settings.address} onChange={(v) => set("address", v)} />
           <AdminField label="البريد الإلكتروني" value={settings.email} onChange={(v) => set("email", v)} dir="ltr" />
-          <AdminField
-            label="أرقام الجوال (افصل بفاصلة)"
-            value={settings.mobiles.join("، ")}
-            onChange={(v) => set("mobiles", v.split(/[,،]/).map((m) => m.trim()).filter(Boolean))}
-          />
+          <div className="grid md:grid-cols-2 gap-4">
+            <AdminField label="هاتف / واتساب" value={settings.phone} onChange={(v) => set("phone", v)} dir="ltr" />
+            <AdminField label="فاكس" value={settings.fax} onChange={(v) => set("fax", v)} dir="ltr" />
+          </div>
         </section>
 
         <section className="card-elevated rounded-sm p-6 space-y-4">

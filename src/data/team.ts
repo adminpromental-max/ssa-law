@@ -6,6 +6,7 @@ export interface TeamMember {
   bio?: string;
   specialties?: string[];
   image?: string;
+  homepageImage?: string;
 }
 
 export interface TeamDepartment {
@@ -26,6 +27,7 @@ export const teamStructure: TeamStructure = {
     name: "المحامي/ صالح بن سلمان العمري",
     hireDate: "2004-08-15",
     image: "/images/team/saleh-al-amri.png",
+    homepageImage: "/images/team/saleh-al-amri-home.png",
     qualifications:
       "مستشار قانوني بوزارة العدل (ثاني) · مدير إدارة التحكيم والمصلحة · ماجستير قانون",
     bio:

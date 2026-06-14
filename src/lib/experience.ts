@@ -1,9 +1,17 @@
-const FOUNDED_HIJRI_YEAR = 1436;
+/** تحويل تقريبي لسنة هجرية إلى ميلادية للعرض */
+export function hijriYearToGregorian(hijriYear: number): number {
+  return Math.round(hijriYear * 0.970224 + 621.5643);
+}
 
-/** سنوات خبرة المكتب منذ تأسيسه عام 1436 هـ */
-export function getOfficeExperienceYears(
-  foundedHijriYear = FOUNDED_HIJRI_YEAR
-): number {
+export function formatFoundedYearDisplay(foundedYear: string): string {
+  const match = foundedYear.match(/(\d{4})/);
+  if (!match) return foundedYear;
+  const hijri = parseInt(match[1], 10);
+  const gregorian = hijriYearToGregorian(hijri);
+  return `${hijri} هـ / ${gregorian.toLocaleString("en-US")} م`;
+}
+
+export function getOfficeExperienceYears(foundedHijriYear = 1436): number {
   const now = new Date();
   const currentHijriYear = parseInt(
     new Intl.DateTimeFormat("en-u-ca-islamic", { year: "numeric" }).format(now),
@@ -25,10 +33,11 @@ export function getExperienceYears(hireDate: string): number {
   return Math.max(years, 0);
 }
 
-export function formatHireDate(hireDate: string): string {
-  return new Intl.DateTimeFormat("ar-SA", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(new Date(hireDate));
+export function formatExperienceYears(hireDate: string): string {
+  const years = getExperienceYears(hireDate);
+  const n = years.toLocaleString("en-US");
+  if (years === 1) return `${n} سنة خبرة`;
+  if (years === 2) return `${n} سنتان خبرة`;
+  if (years >= 3 && years <= 10) return `${n} سنوات خبرة`;
+  return `${n} سنة خبرة`;
 }

@@ -30,7 +30,18 @@ function normalizeDb(data: Partial<Database>): Database {
     importantLinks: data.importantLinks ?? seed.importantLinks,
     clients: data.clients?.length ? data.clients : seed.clients,
     articles: data.articles?.length ? data.articles : seed.articles,
-    siteSettings: { ...seed.siteSettings, ...(data.siteSettings ?? {}) },
+    siteSettings: {
+      ...seed.siteSettings,
+      ...(data.siteSettings ?? {}),
+      phone:
+        data.siteSettings?.phone ??
+        data.siteSettings?.mobiles?.[0] ??
+        seed.siteSettings.phone,
+      fax:
+        data.siteSettings?.fax ??
+        data.siteSettings?.mobiles?.[1] ??
+        seed.siteSettings.fax,
+    },
     homepage: {
       ...seed.homepage,
       ...(data.homepage ?? {}),

@@ -102,6 +102,12 @@ export default function AdminArticlesPage() {
               />
             </div>
             <AdminField label="المحتوى (للمستقبل)" value={article.content || ""} onChange={(v) => updateArticle(article.id, { content: v })} multiline />
+            <AdminField
+              label="رابط فيديو (YouTube)"
+              value={article.videoUrl || ""}
+              onChange={(v) => updateArticle(article.id, { videoUrl: v })}
+              dir="ltr"
+            />
             <button onClick={() => removeArticle(article.id)} className="mt-3 flex items-center gap-1 text-sm text-red-400">
               <Trash2 className="w-4 h-4" /> حذف
             </button>

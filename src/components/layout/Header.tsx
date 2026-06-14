@@ -39,7 +39,7 @@ export function Header() {
 
             <div className="hidden lg:flex items-center gap-4">
               <WhatsAppLink
-                phone={siteConfig.contact.mobiles[0]}
+                phone={siteConfig.contact.phone}
                 label="جوال"
                 className="text-cream/60"
               />
@@ -86,7 +86,7 @@ export function Header() {
                 </Button>
                 <div className="flex justify-center py-2">
                   <WhatsAppLink
-                    phone={siteConfig.contact.mobiles[0]}
+                    phone={siteConfig.contact.phone}
                     label="جوال"
                     className="text-gold"
                     showNumber="always"

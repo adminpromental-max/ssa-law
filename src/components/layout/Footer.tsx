@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Mail, MapPin } from "lucide-react";
-import { navLinks } from "@/data/site";
+import { navLinks, siteConfig } from "@/data/site";
+import { MAP_URL } from "@/data/contact";
 import { getSiteSettings } from "@/lib/content";
+import { resolveSiteContact } from "@/lib/site-contact";
 import { Logo } from "@/components/ui/Logo";
-import { MobileWhatsAppList } from "@/components/ui/MobileWhatsAppList";
+import { ContactPhones } from "@/components/ui/ContactPhones";
 
 export async function Footer() {
   const site = await getSiteSettings();
+  const contact = resolveSiteContact(site);
 
   return (
     <footer className="section-footer border-t border-gold/15">
@@ -84,24 +87,35 @@ export async function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-gold mt-1 shrink-0" />
-                <span className="text-cream/60 text-sm">{site.address}</span>
+                <a
+                  href={MAP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cream/60 hover:text-gold text-sm transition-colors"
+                >
+                  {site.address}
+                </a>
               </li>
               <li>
-                <MobileWhatsAppList
-                  phones={site.mobiles}
+                <ContactPhones
+                  site={site}
                   linkClassName="text-cream/60"
                   showNumber="desktop"
                 />
               </li>
-              <li className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-gold shrink-0" />
+              <li>
                 <a
-                  href={`mailto:${site.email}`}
-                  className="text-cream/60 hover:text-gold text-sm transition-colors"
-                  dir="ltr"
+                  href={`mailto:${contact.email}`}
+                  className="inline-flex items-center gap-2 text-cream/60 hover:text-gold text-sm transition-colors"
                 >
-                  {site.email}
+                  <Mail className="w-4 h-4 text-gold shrink-0" />
+                  أرسل إيميل
                 </a>
+              </li>
+              <li className="text-cream/50 text-sm">
+                {siteConfig.workingHours.days}
+                <br />
+                <span dir="ltr">{siteConfig.workingHours.hours}</span>
               </li>
             </ul>
           </div>

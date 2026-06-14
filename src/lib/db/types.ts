@@ -15,6 +15,9 @@ export interface SiteSettings {
   license: string;
   foundedYear: string;
   address: string;
+  phone: string;
+  fax: string;
+  /** @deprecated use phone / fax */
   mobiles: string[];
   email: string;
   website: string;
@@ -63,6 +66,7 @@ export interface ArticleRecord {
   image: string;
   excerpt?: string;
   content?: string;
+  videoUrl?: string;
 }
 
 export interface ContactSubmission {

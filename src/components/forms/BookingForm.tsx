@@ -152,9 +152,12 @@ export function BookingForm() {
             className="w-full px-4 py-3 rounded-sm"
           >
             <option value="">اختر الوقت</option>
-            <option value="صباحاً (8-12)">صباحاً (8-12)</option>
-            <option value="ظهراً (12-3)">ظهراً (12-3)</option>
-            <option value="مساءً (3-6)">مساءً (3-6)</option>
+            <option value="صباحاً (10:00 AM - 12:00 PM)">
+              صباحاً (10:00 AM - 12:00 PM)
+            </option>
+            <option value="مساءً (12:00 PM - 3:30 PM)">
+              مساءً (12:00 PM - 3:30 PM)
+            </option>
           </select>
         </div>
       </div>

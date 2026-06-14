@@ -1,33 +1,27 @@
-import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
-import { siteConfig } from "@/data/site";
+import { ContactPhones } from "@/components/ui/ContactPhones";
+import type { SiteSettings } from "@/lib/db/types";
 
 interface MobileWhatsAppListProps {
   className?: string;
   showNumber?: "always" | "desktop" | "never";
   linkClassName?: string;
   phones?: string[];
+  site?: Partial<SiteSettings> | null;
 }
 
+/** @deprecated use ContactPhones */
 export function MobileWhatsAppList({
   className = "",
   showNumber = "desktop",
   linkClassName = "",
-  phones,
+  site,
 }: MobileWhatsAppListProps) {
-  const list = phones?.length ? phones : siteConfig.contact.mobiles;
-
   return (
-    <div className={`space-y-4 ${className}`}>
-      {list.map((phone) => (
-        <div key={phone}>
-          <p className="text-cream/50 text-sm mb-2">جوال</p>
-          <WhatsAppLink
-            phone={phone}
-            className={linkClassName}
-            showNumber={showNumber}
-          />
-        </div>
-      ))}
-    </div>
+    <ContactPhones
+      site={site}
+      className={className}
+      showNumber={showNumber}
+      linkClassName={linkClassName}
+    />
   );
 }

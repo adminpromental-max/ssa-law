@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { updateDb } from "@/lib/db";
+import { buildBookingEmailHtml, sendEmail } from "@/lib/email";
 import crypto from "crypto";
 
 export async function POST(request: Request) {
@@ -28,6 +29,19 @@ export async function POST(request: Request) {
         createdAt: new Date().toISOString(),
         read: false,
       });
+    });
+
+    await sendEmail({
+      subject: `طلب حجز استشارة — ${name}`,
+      html: buildBookingEmailHtml({
+        name,
+        phone,
+        email,
+        service,
+        preferredDate,
+        preferredTime,
+        notes,
+      }),
     });
 
     return NextResponse.json({ success: true });

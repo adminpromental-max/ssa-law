@@ -2,15 +2,24 @@ import type { Metadata } from "next";
 import { Mail, MapPin, Clock } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
-import { MobileWhatsAppList } from "@/components/ui/MobileWhatsAppList";
+import { ContactPhones } from "@/components/ui/ContactPhones";
+import { OfficeMap } from "@/components/ui/OfficeMap";
+import { MAP_URL } from "@/data/contact";
 import { siteConfig } from "@/data/site";
+import { getSiteSettings } from "@/lib/content";
+import { resolveSiteContact } from "@/lib/site-contact";
 
 export const metadata: Metadata = {
   title: "تواصل معنا",
   description: "تواصل مع مكتب صالح بن سلمان العمري للمحاماة والاستشارات القانونية",
 };
 
-export default function ContactPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ContactPage() {
+  const site = await getSiteSettings();
+  const contact = resolveSiteContact(site);
+
   return (
     <>
       <PageHero
@@ -33,29 +42,30 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-cream/50 text-sm mb-1">العنوان</p>
-                    <p className="text-cream">{siteConfig.contact.address}</p>
+                    <a
+                      href={MAP_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cream hover:text-gold transition-colors"
+                    >
+                      {contact.address}
+                    </a>
                   </div>
                 </div>
 
-                <MobileWhatsAppList
-                  linkClassName="text-cream"
-                  showNumber="always"
-                />
+                <ContactPhones site={site} linkClassName="text-cream" showNumber="always" />
 
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-sm bg-gold/10 flex items-center justify-center shrink-0">
                     <Mail className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-cream/50 text-sm mb-1">
-                      البريد الإلكتروني
-                    </p>
+                    <p className="text-cream/50 text-sm mb-1">البريد الإلكتروني</p>
                     <a
-                      href={`mailto:${siteConfig.contact.email}`}
+                      href={`mailto:${contact.email}`}
                       className="text-cream hover:text-gold transition-colors"
-                      dir="ltr"
                     >
-                      {siteConfig.contact.email}
+                      أرسل إيميل
                     </a>
                   </div>
                 </div>
@@ -65,18 +75,16 @@ export default function ContactPage() {
                     <Clock className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-cream/50 text-sm mb-1">
-                      الموقع الإلكتروني
+                    <p className="text-cream/50 text-sm mb-1">أوقات العمل</p>
+                    <p className="text-cream text-sm">
+                      {siteConfig.workingHours.days}
+                      <br />
+                      <span dir="ltr">{siteConfig.workingHours.hours}</span>
                     </p>
-                    <a
-                      href={`https://${siteConfig.contact.website}`}
-                      className="text-cream hover:text-gold transition-colors"
-                      dir="ltr"
-                    >
-                      {siteConfig.contact.website}
-                    </a>
                   </div>
                 </div>
+
+                <OfficeMap />
               </div>
             </div>
 

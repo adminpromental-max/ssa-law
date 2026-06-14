@@ -14,7 +14,10 @@ export function TeamLeaderPreview({
   heading = "فريق عمل مؤهل بخبرة كبيرة في مجال القانون بشتى مجالاته",
   leaderLine = "تحت قيادة المحامي: صالح بن سلمان العمري",
 }: TeamLeaderPreviewProps) {
-  const imageSrc = leader.image ?? "/images/team/saleh-al-amri.png";
+  const imageSrc =
+    leader.homepageImage ??
+    leader.image ??
+    "/images/team/saleh-al-amri-home.png";
 
   return (
     <section className="section-team-light py-16 sm:py-24">
@@ -70,12 +73,12 @@ export function TeamLeaderPreview({
 
           {/* Photo — left side in RTL */}
           <div className="order-2 flex justify-center lg:justify-end">
-            <div className="team-leader-photo relative w-full max-w-md aspect-[3/4] overflow-hidden rounded-sm shadow-[0_20px_50px_rgba(20,18,16,0.18)]">
+            <div className="team-leader-photo relative w-full max-w-md aspect-[3/4] overflow-hidden rounded-sm shadow-[0_20px_50px_rgba(20,18,16,0.18)] bg-cream/5">
               <Image
                 src={imageSrc}
                 alt="المحامي صالح بن سلمان العمري"
                 fill
-                className="object-cover object-top"
+                className="object-contain object-center p-2"
                 sizes="(max-width: 1024px) 90vw, 420px"
                 priority
               />

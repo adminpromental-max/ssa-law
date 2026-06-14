@@ -9,13 +9,20 @@ export const siteConfig = {
   foundedYear: "1436 هـ",
   contact: {
     address: "الرياض - حي الربوة",
-    mobiles: ["011-449-0000", "011-438-5577"],
-    email: "info@ssa-law.com",
+    phone: "011-449-0000",
+    fax: "011-438-5577",
+    /** @deprecated use phone */
+    mobiles: ["011-449-0000"],
+    email: "amin@ssa-law.com",
     website: "www.ssa-law.com",
     whatsapp: "966114490000",
   },
   social: {
     whatsapp: "https://wa.me/966114490000",
+  },
+  workingHours: {
+    days: "الأحد — الخميس",
+    hours: "8:30 AM — 4:30 PM",
   },
 };
 
@@ -47,4 +54,3 @@ export const values = [
     description: "استراتيجيات مُثبتة لحماية مصالحكم وتحقيق أهدافكم",
   },
 ];
-

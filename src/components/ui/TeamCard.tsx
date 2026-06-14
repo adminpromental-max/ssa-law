@@ -1,10 +1,7 @@
 import Image from "next/image";
 import { User, Briefcase } from "lucide-react";
 import type { TeamMember } from "@/data/team";
-import {
-  formatHireDate,
-  getExperienceYears,
-} from "@/lib/experience";
+import { formatExperienceYears } from "@/lib/experience";
 
 interface TeamCardProps {
   member: TeamMember;
@@ -12,7 +9,6 @@ interface TeamCardProps {
 }
 
 export function TeamCard({ member, variant = "default" }: TeamCardProps) {
-  const experienceYears = getExperienceYears(member.hireDate);
   const isLead = variant === "lead";
 
   return (
@@ -22,8 +18,8 @@ export function TeamCard({ member, variant = "default" }: TeamCardProps) {
       }`}
     >
       <div
-        className={`relative bg-warm-900 flex items-center justify-center ${
-          isLead ? "h-72" : "h-64"
+        className={`relative bg-cream/5 flex items-center justify-center overflow-hidden ${
+          isLead ? "aspect-[4/5] max-h-[480px]" : "aspect-[3/4] max-h-[420px]"
         }`}
       >
         {member.image ? (
@@ -31,7 +27,7 @@ export function TeamCard({ member, variant = "default" }: TeamCardProps) {
             src={member.image}
             alt={member.name}
             fill
-            className="object-cover object-top"
+            className="object-contain object-center p-2"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
@@ -54,12 +50,7 @@ export function TeamCard({ member, variant = "default" }: TeamCardProps) {
         </h3>
         <div className="flex items-start gap-2 text-cream/60 text-sm mb-3">
           <Briefcase className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-          <div>
-            <p>تاريخ التعيين: {formatHireDate(member.hireDate)}</p>
-            <p className="text-gold/80 mt-1">
-              خبرة {experienceYears} {experienceYears === 1 ? "سنة" : "سنوات"}
-            </p>
-          </div>
+          <p className="text-gold/80">{formatExperienceYears(member.hireDate)}</p>
         </div>
         {member.qualifications && (
           <p className="text-cream/60 text-sm leading-relaxed mb-4">

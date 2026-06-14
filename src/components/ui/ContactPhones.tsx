@@ -21,9 +21,6 @@ export function ContactPhones({
       <div>
         <p className="text-cream/50 text-sm mb-3">هاتف / واتساب</p>
         <ContactQuickActions phone={phone} size={size} />
-        <p className="text-cream/40 text-xs mt-2.5" dir="ltr">
-          {phone}
-        </p>
       </div>
       <div>
         <p className="text-cream/50 text-sm mb-2">فاكس</p>

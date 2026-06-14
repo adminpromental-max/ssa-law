@@ -50,12 +50,12 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative min-h-[100dvh] flex items-center section-hero-light overflow-hidden">
+      <section className="relative min-h-[100dvh] flex items-center justify-center section-hero-light overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-bl from-gold/8 via-transparent to-gold-muted/5" />
         <div className="absolute top-0 left-0 right-0 h-px bg-gold/20" />
         <div className="hidden md:block absolute bottom-10 left-10 w-64 h-64 bg-gold/8 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-20 w-full">
-          <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-20 flex justify-center">
+          <div className="flex flex-col items-center text-center w-full max-w-2xl">
             <HeroNamePlate />
 
             <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
@@ -72,11 +72,11 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <p className="text-black/70 text-sm sm:text-base leading-relaxed mt-6 mb-8 max-w-xl">
+            <p className="text-black/70 text-sm sm:text-base leading-relaxed mt-6 mb-8 max-w-xl mx-auto text-center">
               {homepage.heroDescription}
             </p>
 
-            <Button href="/services" size="lg" className="w-full max-w-sm sm:max-w-md px-10">
+            <Button href="/services" size="lg" className="w-full max-w-sm sm:max-w-md px-10 mx-auto">
               خدماتنا
             </Button>
           </div>

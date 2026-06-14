@@ -10,6 +10,9 @@ interface TeamCardProps {
 
 export function TeamCard({ member, variant = "default" }: TeamCardProps) {
   const isLead = variant === "lead";
+  const avatarSize = isLead
+    ? "w-28 h-28 sm:w-32 sm:h-32"
+    : "w-24 h-24 sm:w-28 sm:h-28";
 
   return (
     <div
@@ -17,52 +20,53 @@ export function TeamCard({ member, variant = "default" }: TeamCardProps) {
         isLead ? "border-gold/40" : "md:hover:border-gold/30"
       }`}
     >
-      <div
-        className={`relative bg-cream/5 flex items-center justify-center overflow-hidden ${
-          isLead ? "aspect-[4/5] max-h-[480px]" : "aspect-[3/4] max-h-[420px]"
-        }`}
-      >
-        {member.image ? (
-          <Image
-            src={member.image}
-            alt={member.name}
-            fill
-            className="object-contain object-center p-2"
-            sizes="(max-width: 768px) 100vw, 33vw"
-          />
-        ) : (
-          <div className="flex flex-col items-center gap-3 text-cream/30">
-            <div className="w-20 h-20 rounded-full border-2 border-dashed border-gold/30 flex items-center justify-center">
-              <User className="w-10 h-10" />
-            </div>
-            <span className="text-sm">الصورة قريباً</span>
+      <div className="pt-8 pb-2 px-6 flex flex-col items-center text-center">
+        <div className="relative mb-4">
+          <div
+            className={`relative ${avatarSize} rounded-full overflow-hidden border-2 border-gold/35 shadow-[0_8px_24px_rgba(201,169,98,0.15)] bg-cream/5`}
+          >
+            {member.image ? (
+              <Image
+                src={member.image}
+                alt={member.name}
+                fill
+                className="object-cover object-[center_18%] scale-110"
+                sizes="128px"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-cream/30">
+                <User className="w-10 h-10" />
+              </div>
+            )}
           </div>
-        )}
-        {isLead && (
-          <div className="absolute top-4 right-4 bg-gold text-black text-xs font-bold px-3 py-1 rounded-sm">
-            المدير العام
-          </div>
-        )}
-      </div>
-      <div className="p-6">
-        <h3 className="text-lg font-bold text-cream mb-1 leading-snug">
+          {isLead && (
+            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gold text-black text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+              المدير العام
+            </span>
+          )}
+        </div>
+
+        <h3 className="text-lg font-bold text-cream mb-1 leading-snug mt-1">
           {member.name}
         </h3>
-        <div className="flex items-start gap-2 text-cream/60 text-sm mb-3">
-          <Briefcase className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+        <div className="flex items-center justify-center gap-2 text-cream/60 text-sm mb-3">
+          <Briefcase className="w-4 h-4 text-gold shrink-0" />
           <p className="text-gold/80">{formatExperienceYears(member.hireDate)}</p>
         </div>
+      </div>
+
+      <div className="px-6 pb-6 text-center">
         {member.qualifications && (
           <p className="text-cream/60 text-sm leading-relaxed mb-4">
             {member.qualifications}
           </p>
         )}
         {member.specialties && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap justify-center gap-2">
             {member.specialties.map((s) => (
               <span
                 key={s}
-                className="text-xs bg-gold/10 text-gold px-3 py-1 rounded-sm"
+                className="text-xs bg-gold/10 text-gold px-3 py-1 rounded-full"
               >
                 {s}
               </span>

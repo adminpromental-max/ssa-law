@@ -1,6 +1,6 @@
 import { ArrowLeft, Shield, Award, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { ContactQuickActions } from "@/components/ui/ContactQuickActions";
 import { HeroNamePlate } from "@/components/ui/HeroNamePlate";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -187,12 +187,7 @@ export default async function HomePage() {
             <Button href="/book" size="lg">
               احجز استشارة
             </Button>
-            <WhatsAppLink
-              phone={contact.phone}
-              label="جوال"
-              className="text-cream border border-gold/30 rounded-sm px-6 py-3 hover:border-[#25D366]"
-              showNumber="always"
-            />
+            <ContactQuickActions phone={contact.phone} size="md" />
           </div>
         </div>
       </section>

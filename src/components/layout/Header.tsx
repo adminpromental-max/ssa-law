@@ -6,7 +6,7 @@ import { Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/data/site";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
-import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { ContactQuickActions } from "@/components/ui/ContactQuickActions";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -37,11 +37,10 @@ export function Header() {
               ))}
             </nav>
 
-            <div className="hidden lg:flex items-center gap-4">
-              <WhatsAppLink
+            <div className="hidden lg:flex items-center gap-3">
+              <ContactQuickActions
                 phone={siteConfig.contact.phone}
-                label="جوال"
-                className="text-cream/60"
+                size="sm"
               />
               <Button href="/book" size="sm">
                 احجز استشارة
@@ -85,11 +84,9 @@ export function Header() {
                   احجز استشارة
                 </Button>
                 <div className="flex justify-center py-2">
-                  <WhatsAppLink
+                  <ContactQuickActions
                     phone={siteConfig.contact.phone}
-                    label="جوال"
-                    className="text-gold"
-                    showNumber="always"
+                    size="md"
                   />
                 </div>
               </div>

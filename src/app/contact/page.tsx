@@ -53,7 +53,7 @@ export default async function ContactPage() {
                   </div>
                 </div>
 
-                <ContactPhones site={site} linkClassName="text-cream" showNumber="always" />
+                <ContactPhones site={site} size="md" />
 
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-sm bg-gold/10 flex items-center justify-center shrink-0">

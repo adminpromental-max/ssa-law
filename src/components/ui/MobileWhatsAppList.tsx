@@ -3,25 +3,15 @@ import type { SiteSettings } from "@/lib/db/types";
 
 interface MobileWhatsAppListProps {
   className?: string;
-  showNumber?: "always" | "desktop" | "never";
-  linkClassName?: string;
-  phones?: string[];
   site?: Partial<SiteSettings> | null;
+  size?: "sm" | "md";
 }
 
 /** @deprecated use ContactPhones */
 export function MobileWhatsAppList({
   className = "",
-  showNumber = "desktop",
-  linkClassName = "",
   site,
+  size = "md",
 }: MobileWhatsAppListProps) {
-  return (
-    <ContactPhones
-      site={site}
-      className={className}
-      showNumber={showNumber}
-      linkClassName={linkClassName}
-    />
-  );
+  return <ContactPhones site={site} className={className} size={size} />;
 }

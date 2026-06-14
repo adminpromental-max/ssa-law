@@ -97,11 +97,7 @@ export async function Footer() {
                 </a>
               </li>
               <li>
-                <ContactPhones
-                  site={site}
-                  linkClassName="text-cream/60"
-                  showNumber="desktop"
-                />
+                <ContactPhones site={site} size="sm" />
               </li>
               <li>
                 <a

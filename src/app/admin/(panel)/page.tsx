@@ -19,7 +19,7 @@ export default async function AdminDashboardPage() {
   const stats = [
     {
       label: "عدد الزوار",
-      value: (db.visitorCount ?? 500).toLocaleString("ar-SA"),
+      value: (db.visitorCount ?? 4000).toLocaleString("ar-SA"),
       icon: Eye,
       color: "text-gold",
     },

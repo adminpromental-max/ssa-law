@@ -157,7 +157,7 @@ export async function getVisitorCount(): Promise<number> {
     const db = await readDb();
     return db.visitorCount;
   } catch {
-    return 500;
+    return 4000;
   }
 }
 

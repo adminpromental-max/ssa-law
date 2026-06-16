@@ -57,7 +57,7 @@ function normalizeDb(data: Partial<Database>): Database {
     },
     contactSubmissions: data.contactSubmissions ?? [],
     bookingSubmissions: data.bookingSubmissions ?? [],
-    visitorCount: data.visitorCount ?? 500,
+    visitorCount: Math.max(data.visitorCount ?? 4000, 4000),
     adminPasswordHash: data.adminPasswordHash,
   };
 }

@@ -24,6 +24,6 @@ export function createSeedDatabase(): Database {
     homepage: createDefaultHomepageContent(),
     contactSubmissions: [],
     bookingSubmissions: [],
-    visitorCount: 500,
+    visitorCount: 4000,
   };
 }

@@ -36,9 +36,15 @@ export function TeamLeaderPreview({
               />
             </div>
 
-            <p className="text-gold-dark font-bold text-base sm:text-lg mb-5">
+            <p className="text-gold-dark font-bold text-base sm:text-lg mb-3">
               {leaderLine}
             </p>
+
+            {leader.qualifications && (
+              <p className="text-black/80 font-semibold text-base sm:text-lg mb-5">
+                {leader.qualifications}
+              </p>
+            )}
 
             <div className="space-y-4 text-black/65 text-sm sm:text-base leading-relaxed text-justify max-w-xl mx-auto lg:mx-0">
               {leader.bio ? (

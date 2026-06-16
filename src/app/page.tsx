@@ -50,15 +50,15 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative min-h-[100dvh] flex items-center justify-center section-hero-light overflow-hidden">
+      <section className="relative flex items-center justify-center section-hero-light overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-bl from-gold/8 via-transparent to-gold-muted/5" />
         <div className="absolute top-0 left-0 right-0 h-px bg-gold/20" />
         <div className="hidden md:block absolute bottom-10 left-10 w-64 h-64 bg-gold/8 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-20 flex justify-center">
-          <div className="flex flex-col items-center text-center w-full max-w-2xl">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-6 sm:pb-8 flex justify-center">
+          <div className="flex flex-col items-center text-center w-full max-w-xl">
             <HeroNamePlate />
 
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-5">
               <div className="inline-flex items-center gap-2 bg-white/75 border border-gold/30 rounded-sm px-3 py-2 shadow-sm">
                 <Award className="w-3.5 h-3.5 text-gold-dark shrink-0" />
                 <span className="text-gold-dark text-xs font-medium whitespace-nowrap">
@@ -72,11 +72,11 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <p className="text-black/70 text-sm sm:text-base leading-relaxed mt-6 mb-8 max-w-xl mx-auto text-center">
+            <p className="text-black/70 text-sm sm:text-base leading-relaxed mt-4 sm:mt-5 mb-5 sm:mb-6 max-w-lg mx-auto text-center line-clamp-3 sm:line-clamp-none">
               {homepage.heroDescription}
             </p>
 
-            <Button href="/services" size="lg" className="w-full max-w-sm sm:max-w-md px-10 mx-auto">
+            <Button href="/services" size="lg" className="w-full max-w-xs sm:max-w-sm px-8 mx-auto">
               خدماتنا
             </Button>
           </div>

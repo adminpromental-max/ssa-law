@@ -9,7 +9,7 @@ export function HeroNamePlate() {
         width={1075}
         height={565}
         priority
-        className="w-full max-w-[280px] sm:max-w-[360px] lg:max-w-[460px] xl:max-w-[520px] h-auto object-contain mx-auto"
+        className="w-full max-w-[240px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[400px] h-auto object-contain mx-auto"
       />
     </h1>
   );

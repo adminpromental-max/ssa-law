@@ -22,7 +22,7 @@ export function VisitorCounter() {
           setCount(data.count);
         }
       } catch {
-        setCount(500);
+        setCount(4000);
       }
     }
 

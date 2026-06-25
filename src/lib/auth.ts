@@ -14,7 +14,22 @@ function getEnvPassword(): string {
   return process.env.ADMIN_PASSWORD || "admin123";
 }
 
+function useEnvPasswordOnly(): boolean {
+  return process.env.ADMIN_USE_ENV_PASSWORD === "true";
+}
+
 export async function verifyPassword(password: string): Promise<boolean> {
+  const expected = getEnvPassword();
+
+  if (useEnvPasswordOnly()) {
+    try {
+      if (password.length !== expected.length) return false;
+      return crypto.timingSafeEqual(Buffer.from(password), Buffer.from(expected));
+    } catch {
+      return false;
+    }
+  }
+
   try {
     const db = await readDb();
     if (db.adminPasswordHash) {
@@ -24,7 +39,6 @@ export async function verifyPassword(password: string): Promise<boolean> {
     // fallback to env
   }
 
-  const expected = getEnvPassword();
   try {
     if (password.length !== expected.length) return false;
     return crypto.timingSafeEqual(Buffer.from(password), Buffer.from(expected));

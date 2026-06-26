@@ -2,6 +2,8 @@ import fs from "fs/promises";
 import path from "path";
 import { put } from "@vercel/blob";
 import { canUseBlob, getBlobOptions } from "@/lib/db/blob";
+import { uploadToSupabaseStorage } from "@/lib/db/supabase-store";
+import { canUseSupabase } from "@/lib/supabase/server";
 
 const ALLOWED_FOLDERS = [
   "team",
@@ -32,6 +34,11 @@ export async function uploadAdminFile(
   }
 
   const filename = `${Date.now()}-${sanitizeFilename(file.name.replace(/\.[^.]+$/, ""))}.${ext}`;
+
+  if (canUseSupabase()) {
+    const url = await uploadToSupabaseStorage(file, folder, filename);
+    if (url) return url;
+  }
 
   if (canUseBlob()) {
     const blob = await put(`ssa-law/uploads/${folder}/${filename}`, file, {

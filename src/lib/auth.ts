@@ -14,14 +14,14 @@ function getEnvPassword(): string {
   return process.env.ADMIN_PASSWORD || "admin123";
 }
 
-function useEnvPasswordOnly(): boolean {
+function shouldUseEnvPasswordOnly(): boolean {
   return process.env.ADMIN_USE_ENV_PASSWORD === "true";
 }
 
 export async function verifyPassword(password: string): Promise<boolean> {
   const expected = getEnvPassword();
 
-  if (useEnvPasswordOnly()) {
+  if (shouldUseEnvPasswordOnly()) {
     try {
       if (password.length !== expected.length) return false;
       return crypto.timingSafeEqual(Buffer.from(password), Buffer.from(expected));

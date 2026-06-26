@@ -4,14 +4,29 @@ import { get, put, list, BlobNotFoundError } from "@vercel/blob";
 import { createSeedDatabase } from "./seed";
 import type { Database } from "./types";
 import { canUseBlob as checkBlob, getBlobOptions } from "./blob";
+import {
+  readFromSupabase,
+  writeToSupabase,
+  testSupabaseStorage,
+} from "./supabase-store";
+import { canUseSupabase } from "@/lib/supabase/server";
 
 const BLOB_PATHNAME = "ssa-law/database.json";
+
+export { canUseSupabase };
 
 export function canUseBlob(): boolean {
   return checkBlob();
 }
+
 export function hasBlobStorage(): boolean {
   return checkBlob();
+}
+
+export function getActiveStorageProvider(): "supabase" | "blob" | "local" {
+  if (canUseSupabase()) return "supabase";
+  if (canUseBlob()) return "blob";
+  return "local";
 }
 
 function getLocalDbPath(): string {
@@ -150,8 +165,27 @@ async function seedDatabase(): Promise<Database> {
   return createSeedDatabase();
 }
 
+async function loadInitialDatabase(): Promise<Database> {
+  const fromBlob = await readFromBlob();
+  if (fromBlob) return fromBlob;
+
+  const fromLocal = await readLocalFile();
+  if (fromLocal) return fromLocal;
+
+  return seedDatabase();
+}
+
 export async function readDb(): Promise<Database> {
   try {
+    if (canUseSupabase()) {
+      const fromSupabase = await readFromSupabase();
+      if (fromSupabase) return normalizeDb(fromSupabase);
+
+      const initial = normalizeDb(await loadInitialDatabase());
+      await writeToSupabase(initial);
+      return initial;
+    }
+
     if (canUseBlob()) {
       const fromBlob = await readFromBlob();
       if (fromBlob) return fromBlob;
@@ -176,6 +210,14 @@ export async function readDb(): Promise<Database> {
 export async function writeDb(data: Database): Promise<void> {
   const normalized = normalizeDb(data);
 
+  if (canUseSupabase()) {
+    const supabaseOk = await writeToSupabase(normalized);
+    if (!supabaseOk) {
+      throw new Error("فشل الحفظ على Supabase");
+    }
+    return;
+  }
+
   if (canUseBlob()) {
     const blobOk = await writeToBlob(normalized);
     if (!blobOk) {
@@ -198,6 +240,33 @@ export async function updateDb(
   const updated = normalizeDb((result ?? db) as Database);
   await writeDb(updated);
   return updated;
+}
+
+export async function testRemoteStorage(): Promise<{
+  ok: boolean;
+  canRead: boolean;
+  canWrite: boolean;
+  hasData: boolean;
+  provider: "supabase" | "blob" | "local";
+  error?: string;
+}> {
+  if (canUseSupabase()) {
+    return testSupabaseStorage();
+  }
+
+  if (canUseBlob()) {
+    const blob = await testBlobStorage();
+    return { ...blob, provider: "blob" };
+  }
+
+  return {
+    ok: false,
+    canRead: false,
+    canWrite: false,
+    hasData: false,
+    provider: "local",
+    error: "لا يوجد تخزين بعيد — فعّلي Supabase أو Blob",
+  };
 }
 
 export async function testBlobStorage(): Promise<{

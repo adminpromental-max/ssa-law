@@ -1,16 +1,20 @@
 /**
- * إعادة تعيين كلمة مرور لوحة التحكم على Vercel Blob.
+ * إعادة تعيين كلمة مرور لوحة التحكم.
  *
- * الاستخدام:
- *   BLOB_READ_WRITE_TOKEN=your_token node scripts/reset-admin-password.mjs كلمة_السر_الجديدة
+ * Supabase (موصى):
+ *   SUPABASE_URL=xxx SUPABASE_SERVICE_ROLE_KEY=xxx node scripts/reset-admin-password.mjs NewPass123
  *
- * التوكن من: Vercel → المشروع → Settings → Environment Variables → BLOB_READ_WRITE_TOKEN
+ * Blob (قديم):
+ *   BLOB_READ_WRITE_TOKEN=xxx node scripts/reset-admin-password.mjs NewPass123
  */
 
 import { randomBytes, scryptSync } from "crypto";
 import { get, put, BlobNotFoundError } from "@vercel/blob";
+import { createClient } from "@supabase/supabase-js";
 
 const BLOB_PATHNAME = "ssa-law/database.json";
+const SITE_DATA_TABLE = "site_data";
+const SITE_DATA_ID = "main";
 
 function hashPassword(password) {
   const salt = randomBytes(16).toString("hex");
@@ -18,50 +22,62 @@ function hashPassword(password) {
   return `${salt}:${hash}`;
 }
 
-async function main() {
-  const newPassword = process.argv[2];
+async function resetViaSupabase(newPassword) {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!newPassword || newPassword.length < 8) {
-    console.error("\n❌ كلمة المرور يجب أن تكون 8 أحرف على الأقل.\n");
-    console.error("الاستخدام:");
-    console.error(
-      "  BLOB_READ_WRITE_TOKEN=xxx node scripts/reset-admin-password.mjs YourNewPassword\n"
-    );
-    process.exit(1);
+  if (!url || !key) return false;
+
+  const supabase = createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+
+  const { data, error } = await supabase
+    .from(SITE_DATA_TABLE)
+    .select("data")
+    .eq("id", SITE_DATA_ID)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Supabase read: ${error.message}`);
   }
 
+  const db = data?.data && typeof data.data === "object" ? { ...data.data } : {};
+  db.adminPasswordHash = hashPassword(newPassword);
+
+  const { error: writeError } = await supabase.from(SITE_DATA_TABLE).upsert(
+    {
+      id: SITE_DATA_ID,
+      data: db,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "id" }
+  );
+
+  if (writeError) {
+    throw new Error(`Supabase write: ${writeError.message}`);
+  }
+
+  return true;
+}
+
+async function resetViaBlob(newPassword) {
   const token = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) {
-    console.error("\n❌ متغير BLOB_READ_WRITE_TOKEN غير موجود.\n");
-    console.error("انسخيه من Vercel → Settings → Environment Variables\n");
-    process.exit(1);
-  }
+  if (!token) return false;
 
   const opts = { token };
+  const result = await get(BLOB_PATHNAME, {
+    access: "private",
+    useCache: false,
+    ...opts,
+  });
 
-  let db;
-  try {
-    const result = await get(BLOB_PATHNAME, {
-      access: "private",
-      useCache: false,
-      ...opts,
-    });
-
-    if (result?.statusCode !== 200 || !result.stream) {
-      throw new Error("لم يُعثر على ملف قاعدة البيانات");
-    }
-
-    const text = await new Response(result.stream).text();
-    db = JSON.parse(text);
-  } catch (error) {
-    if (error instanceof BlobNotFoundError) {
-      console.error("\n❌ ملف database.json غير موجود على Blob.\n");
-    } else {
-      console.error("\n❌ فشل قراءة قاعدة البيانات:", error.message, "\n");
-    }
-    process.exit(1);
+  if (result?.statusCode !== 200 || !result.stream) {
+    throw new Error("لم يُعثر على database.json على Blob");
   }
 
+  const text = await new Response(result.stream).text();
+  const db = JSON.parse(text);
   db.adminPasswordHash = hashPassword(newPassword);
 
   await put(BLOB_PATHNAME, JSON.stringify(db, null, 2), {
@@ -72,11 +88,44 @@ async function main() {
     ...opts,
   });
 
-  console.log("\n✅ تم إعادة تعيين كلمة المرور بنجاح!");
-  console.log("   سجّلي الدخول من: https://lawer-office-delta.vercel.app/admin/login\n");
+  return true;
 }
 
-main().catch((error) => {
-  console.error("\n❌ خطأ:", error.message, "\n");
-  process.exit(1);
-});
+async function main() {
+  const newPassword = process.argv[2];
+
+  if (!newPassword || newPassword.length < 8) {
+    console.error("\n❌ كلمة المرور يجب أن تكون 8 أحرف على الأقل.\n");
+    console.error("الاستخدام:");
+    console.error(
+      "  SUPABASE_URL=xxx SUPABASE_SERVICE_ROLE_KEY=xxx node scripts/reset-admin-password.mjs YourNewPassword\n"
+    );
+    process.exit(1);
+  }
+
+  try {
+    if (await resetViaSupabase(newPassword)) {
+      console.log("\n✅ تم إعادة التعيين عبر Supabase!");
+      console.log("   /admin/login\n");
+      return;
+    }
+
+    if (await resetViaBlob(newPassword)) {
+      console.log("\n✅ تم إعادة التعيين عبر Blob!");
+      console.log("   /admin/login\n");
+      return;
+    }
+
+    console.error("\n❌ أضيفي SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY أو BLOB_READ_WRITE_TOKEN\n");
+    process.exit(1);
+  } catch (error) {
+    if (error instanceof BlobNotFoundError) {
+      console.error("\n❌ ملف Blob غير موجود.\n");
+    } else {
+      console.error("\n❌", error.message, "\n");
+    }
+    process.exit(1);
+  }
+}
+
+main();

@@ -12,7 +12,7 @@ function emptyMember(): TeamMember {
   return {
     id: `member-${Date.now()}`,
     name: "",
-    hireDate: new Date().toISOString().split("T")[0],
+    experienceYears: 0,
     specialties: [],
   };
 }
@@ -103,17 +103,21 @@ export default function AdminTeamPage() {
     );
   }
 
-  function updateDeptTitle(deptId: string, title: string) {
+  function updateDept(deptId: string, patch: Partial<TeamDepartment>) {
     setTeam((t) =>
       t
         ? {
             ...t,
             departments: t.departments.map((d) =>
-              d.id === deptId ? { ...d, title } : d
+              d.id === deptId ? { ...d, ...patch } : d
             ),
           }
         : t
     );
+  }
+
+  function updateDeptTitle(deptId: string, title: string) {
+    updateDept(deptId, { title });
   }
 
   if (loading) {
@@ -160,6 +164,7 @@ export default function AdminTeamPage() {
             deptIndex={deptIndex}
             deptDrag={deptDrag}
             onTitleChange={(title) => updateDeptTitle(dept.id, title)}
+            onVisibilityChange={(visible) => updateDept(dept.id, { visible })}
             onAddMember={() => addMember(dept.id)}
             onRemoveMember={(id) => removeMember(dept.id, id)}
             onUpdateMember={(memberId, patch) =>
@@ -190,7 +195,14 @@ function MemberEditor({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 grid md:grid-cols-2 gap-4">
           <AdminField label="الاسم" value={member.name} onChange={(v) => onChange({ name: v })} />
-          <AdminField label="تاريخ التعيين" value={member.hireDate} onChange={(v) => onChange({ hireDate: v })} type="date" dir="ltr" />
+          <AdminField
+            label="سنوات الخبرة"
+            type="number"
+            value={String(member.experienceYears ?? 0)}
+            onChange={(v) => onChange({ experienceYears: Number(v) || 0 })}
+            dir="ltr"
+            hint="يظهر كما هو على الموقع — مثال: 5"
+          />
           <div className="md:col-span-2">
             <AdminField label="المؤهلات" value={member.qualifications || ""} onChange={(v) => onChange({ qualifications: v })} />
           </div>
@@ -224,6 +236,7 @@ function DepartmentBlock({
   deptIndex,
   deptDrag,
   onTitleChange,
+  onVisibilityChange,
   onAddMember,
   onRemoveMember,
   onUpdateMember,
@@ -233,6 +246,7 @@ function DepartmentBlock({
   deptIndex: number;
   deptDrag: ReturnType<typeof useDragReorder<TeamDepartment>>;
   onTitleChange: (title: string) => void;
+  onVisibilityChange: (visible: boolean) => void;
   onAddMember: () => void;
   onRemoveMember: (id: string) => void;
   onUpdateMember: (id: string, patch: Partial<TeamMember>) => void;
@@ -248,9 +262,20 @@ function DepartmentBlock({
       onDrop={deptDrag.onDrop}
       isDragging={deptDrag.isDragging(deptIndex)}
     >
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <AdminField label="اسم القسم" value={department.title} onChange={onTitleChange} />
-        <button onClick={onAddMember} className="flex items-center gap-1 text-sm text-gold mt-5">
+      <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
+        <div className="flex-1 min-w-[200px]">
+          <AdminField label="اسم القسم" value={department.title} onChange={onTitleChange} />
+        </div>
+        <label className="flex items-center gap-2 text-sm text-cream/70 pb-1 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={department.visible !== false}
+            onChange={(e) => onVisibilityChange(e.target.checked)}
+            className="accent-gold w-4 h-4"
+          />
+          إظهار في الموقع
+        </label>
+        <button onClick={onAddMember} className="flex items-center gap-1 text-sm text-gold pb-1">
           <Plus className="w-4 h-4" /> عضو
         </button>
       </div>
@@ -271,7 +296,15 @@ function DepartmentBlock({
               <div className="grid lg:grid-cols-3 gap-4">
                 <div className="lg:col-span-2 grid md:grid-cols-2 gap-3">
                   <AdminField label="الاسم" value={member.name} onChange={(v) => onUpdateMember(member.id, { name: v })} />
-                  <AdminField label="تاريخ التعيين" value={member.hireDate} onChange={(v) => onUpdateMember(member.id, { hireDate: v })} type="date" dir="ltr" />
+                  <AdminField
+                    label="سنوات الخبرة"
+                    type="number"
+                    value={String(member.experienceYears ?? 0)}
+                    onChange={(v) =>
+                      onUpdateMember(member.id, { experienceYears: Number(v) || 0 })
+                    }
+                    dir="ltr"
+                  />
                   <div className="md:col-span-2">
                     <AdminField label="المؤهلات" value={member.qualifications || ""} onChange={(v) => onUpdateMember(member.id, { qualifications: v })} />
                   </div>

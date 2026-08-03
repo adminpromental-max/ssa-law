@@ -3,6 +3,7 @@ import path from "path";
 import { get, put, list, BlobNotFoundError } from "@vercel/blob";
 import { createSeedDatabase } from "./seed";
 import type { Database } from "./types";
+import type { TeamStructure } from "@/data/team";
 import { canUseBlob as checkBlob, getBlobOptions } from "./blob";
 import {
   readFromSupabase,
@@ -37,10 +38,20 @@ function getSeedPath(): string {
   return path.join(process.cwd(), "data", "database.seed.json");
 }
 
+function normalizeTeam(team: TeamStructure): TeamStructure {
+  return {
+    ...team,
+    departments: team.departments.map((dept) => ({
+      ...dept,
+      members: dept.members ?? [],
+    })),
+  };
+}
+
 function normalizeDb(data: Partial<Database>): Database {
   const seed = createSeedDatabase();
   return {
-    team: data.team ?? seed.team,
+    team: normalizeTeam(data.team ?? seed.team),
     services: data.services?.length ? data.services : seed.services,
     importantLinks: data.importantLinks ?? seed.importantLinks,
     clients: data.clients?.length ? data.clients : seed.clients,

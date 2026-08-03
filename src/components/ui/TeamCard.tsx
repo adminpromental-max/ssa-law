@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { User, Briefcase } from "lucide-react";
 import type { TeamMember } from "@/data/team";
-import { formatExperienceYears } from "@/lib/experience";
+import { formatExperienceYearsLabel } from "@/lib/experience";
+import { TeamMemberImage } from "@/components/ui/TeamMemberImage";
 
 interface TeamCardProps {
   member: TeamMember;
@@ -13,10 +13,11 @@ export function TeamCard({ member, variant = "default" }: TeamCardProps) {
   const avatarSize = isLead
     ? "w-28 h-28 sm:w-32 sm:h-32"
     : "w-24 h-24 sm:w-28 sm:h-28";
+  const experienceLabel = formatExperienceYearsLabel(member.experienceYears);
 
   return (
     <div
-      className={`card-surface card-elevated rounded-sm overflow-hidden transition-[border-color,box-shadow] duration-300 md:hover:gold-glow ${
+      className={`card-surface card-elevated rounded-sm overflow-hidden transition-[border-color,box-shadow] duration-300 md:hover:gold-glow h-full ${
         isLead ? "border-gold/40" : "md:hover:border-gold/30"
       }`}
     >
@@ -26,12 +27,10 @@ export function TeamCard({ member, variant = "default" }: TeamCardProps) {
             className={`relative ${avatarSize} rounded-full overflow-hidden border-2 border-gold/35 shadow-[0_8px_24px_rgba(201,169,98,0.15)] bg-cream/5`}
           >
             {member.image ? (
-              <Image
+              <TeamMemberImage
                 src={member.image}
                 alt={member.name}
-                fill
                 className="object-cover object-[center_18%] scale-110"
-                sizes="128px"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-cream/30">
@@ -46,13 +45,18 @@ export function TeamCard({ member, variant = "default" }: TeamCardProps) {
           )}
         </div>
 
-        <h3 className="text-lg font-bold text-cream mb-1 leading-snug mt-1">
-          {member.name}
-        </h3>
-        <div className="flex items-center justify-center gap-2 text-cream/60 text-sm mb-3">
-          <Briefcase className="w-4 h-4 text-gold shrink-0" />
-          <p className="text-gold/80">{formatExperienceYears(member.hireDate)}</p>
-        </div>
+        {member.name ? (
+          <h3 className="text-lg font-bold text-cream mb-1 leading-snug mt-1">
+            {member.name}
+          </h3>
+        ) : null}
+
+        {experienceLabel && (
+          <div className="flex items-center justify-center gap-2 text-cream/60 text-sm mb-3">
+            <Briefcase className="w-4 h-4 text-gold shrink-0" />
+            <p className="text-gold/80">{experienceLabel}</p>
+          </div>
+        )}
       </div>
 
       <div className="px-6 pb-6 text-center">
@@ -61,7 +65,7 @@ export function TeamCard({ member, variant = "default" }: TeamCardProps) {
             {member.qualifications}
           </p>
         )}
-        {member.specialties && (
+        {member.specialties && member.specialties.length > 0 && (
           <div className="flex flex-wrap justify-center gap-2">
             {member.specialties.map((s) => (
               <span

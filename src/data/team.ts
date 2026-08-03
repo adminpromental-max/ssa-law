@@ -1,7 +1,9 @@
 export interface TeamMember {
   id: string;
   name: string;
-  hireDate: string;
+  /** @deprecated use experienceYears */
+  hireDate?: string;
+  experienceYears?: number;
   qualifications?: string;
   bio?: string;
   specialties?: string[];
@@ -13,6 +15,8 @@ export interface TeamDepartment {
   id: string;
   title: string;
   members: TeamMember[];
+  /** false = مخفي من الموقع */
+  visible?: boolean;
 }
 
 export interface TeamStructure {
@@ -25,7 +29,7 @@ export const teamStructure: TeamStructure = {
   generalManager: {
     id: "saleh-al-amri",
     name: "المحامي/ صالح بن سلمان العمري",
-    hireDate: "2004-08-15",
+    experienceYears: 20,
     image: "/images/team/saleh-al-amri.png",
     homepageImage: "/images/team/saleh-al-amri-home.png",
     qualifications: "المحامي والمستشار القانوني والموثق",
@@ -40,7 +44,7 @@ export const teamStructure: TeamStructure = {
   officeManager: {
     id: "ameen-othman",
     name: "الأستاذ/ أمين عبد الخالق عتمان",
-    hireDate: "2011-03-20",
+    experienceYears: 14,
     image: "/images/team/ameen-othman.png",
     specialties: ["إدارة العمليات", "تنسيق القضايا"],
   },
@@ -52,7 +56,7 @@ export const teamStructure: TeamStructure = {
         {
           id: "mahmoud-nada",
           name: "الأستاذ/ محمود صلاح الدين ندا",
-          hireDate: "2013-11-05",
+          experienceYears: 12,
           image: "/images/team/mahmoud-nada.png",
           specialties: ["الاستشارات المالية", "التحليل الاقتصادي"],
         },
@@ -65,13 +69,13 @@ export const teamStructure: TeamStructure = {
         {
           id: "mahmoud-abu-sheta",
           name: "الأستاذ/ محمود إسماعيل أبو شيته",
-          hireDate: "2015-06-12",
+          experienceYears: 10,
           specialties: ["الاستشارات القانونية", "صياغة العقود"],
         },
         {
           id: "mayad-al-ahmri",
           name: "الأستاذة/ ميعاد حسن الأحمري",
-          hireDate: "2017-09-01",
+          experienceYears: 8,
           specialties: ["الاستشارات القانونية", "القضايا الحقوقية"],
         },
       ],
@@ -80,16 +84,19 @@ export const teamStructure: TeamStructure = {
       id: "arbitrators",
       title: "المحكمين",
       members: [],
+      visible: false,
     },
     {
       id: "notarization",
       title: "التوثيق والإفراغ",
       members: [],
+      visible: false,
     },
     {
       id: "conciliation",
       title: "الصلح",
       members: [],
+      visible: false,
     },
   ],
 };

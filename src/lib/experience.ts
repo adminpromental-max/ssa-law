@@ -33,11 +33,17 @@ export function getExperienceYears(hireDate: string): number {
   return Math.max(years, 0);
 }
 
-export function formatExperienceYears(hireDate: string): string {
-  const years = getExperienceYears(hireDate);
+export function formatExperienceYearsLabel(years?: number): string | null {
+  if (years == null || years < 0 || Number.isNaN(years)) return null;
   const n = years.toLocaleString("en-US");
   if (years === 1) return `${n} سنة خبرة`;
   if (years === 2) return `${n} سنتان خبرة`;
   if (years >= 3 && years <= 10) return `${n} سنوات خبرة`;
   return `${n} سنة خبرة`;
+}
+
+/** @deprecated use formatExperienceYearsLabel with experienceYears */
+export function formatExperienceYears(hireDate: string): string {
+  const years = getExperienceYears(hireDate);
+  return formatExperienceYearsLabel(years) ?? "";
 }

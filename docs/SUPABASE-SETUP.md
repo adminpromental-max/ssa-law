@@ -9,9 +9,9 @@
 
 1. ادخلي [supabase.com](https://supabase.com) → **Start your project**
 2. **New project**
-   - الاسم: `ssa-law` (أو أي اسم)
-   - Database password: احفظيه (للطوارئ فقط)
-   - Region: الأقرب للسعودية (مثل Frankfurt)
+  - الاسم: `ssa-law` (أو أي اسم)
+  - Database password: احفظيه (للطوارئ فقط)
+  - Region: الأقرب للسعودية (مثل Frankfurt)
 3. انتظري حتى يكتمل الإنشاء (~2 دقيقة)
 
 ---
@@ -37,8 +37,8 @@
 
 1. **Project Settings** → **API**
 2. انسخي:
-   - **Project URL** → `SUPABASE_URL`
-   - **service_role** (secret) → `SUPABASE_SERVICE_ROLE_KEY`
+  - **Project URL** → `SUPABASE_URL`
+  - **service_role** (secret) → `SUPABASE_SERVICE_ROLE_KEY`
 
 ⚠️ **لا تشاركي service_role مع العميل** — يُستخدم على Vercel فقط.
 
@@ -48,12 +48,14 @@
 
 Vercel → المشروع → **Settings** → **Environment Variables**
 
-| المتغير | القيمة |
-|---------|--------|
-| `SUPABASE_URL` | Project URL |
-| `SUPABASE_SERVICE_ROLE_KEY` | service_role key |
-| `SUPABASE_STORAGE_BUCKET` | `uploads` |
-| `ADMIN_PASSWORD` | كلمة سر لوحة التحكم للعميل |
+
+| المتغير                     | القيمة                     |
+| --------------------------- | -------------------------- |
+| `SUPABASE_URL`              | Project URL                |
+| `SUPABASE_SERVICE_ROLE_KEY` | service_role key           |
+| `SUPABASE_STORAGE_BUCKET`   | `uploads`                  |
+| `ADMIN_PASSWORD`            | كلمة سر لوحة التحكم للعميل |
+
 
 ثم: **Deployments** → **Redeploy**
 
@@ -92,3 +94,4 @@ SUPABASE_URL=xxx SUPABASE_SERVICE_ROLE_KEY=xxx \
 - **Blob على Vercel** يمكن إزالة `BLOB_READ_WRITE_TOKEN` بعد التأكد من Supabase
 - **الخطة المجانية** Supabase: 500MB DB + 1GB Storage — كافية للموقع
 - **تغيير كلمة المرور** من اللوحة: `/admin/settings`
+

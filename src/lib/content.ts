@@ -24,13 +24,21 @@ function mergeMember(
   fallback?: TeamMember
 ): TeamMember {
   if (!fallback) return member;
-  return {
+
+  const merged: TeamMember = {
     ...fallback,
     ...member,
-    image: member.image ?? fallback.image,
-    bio: member.bio ?? fallback.bio,
-    qualifications: member.qualifications ?? fallback.qualifications,
+    image: member.image?.trim() ? member.image : fallback.image,
+    bio: member.bio?.trim() ? member.bio : fallback.bio,
+    qualifications: member.qualifications?.trim()
+      ? member.qualifications
+      : fallback.qualifications,
+    name: member.name?.trim() ? member.name : fallback.name,
+    experienceYears:
+      member.experienceYears ?? fallback.experienceYears,
   };
+
+  return merged;
 }
 
 function mergeTeamStructure(
@@ -46,18 +54,26 @@ function mergeTeamStructure(
     }
   }
 
+  const defaultDepts = new Map(
+    defaults.departments.map((dept) => [dept.id, dept])
+  );
+
   return {
     generalManager: mergeMember(
       dbTeam.generalManager,
       defaults.generalManager
     ),
     officeManager: mergeMember(dbTeam.officeManager, defaults.officeManager),
-    departments: dbTeam.departments.map((dept) => ({
-      ...dept,
-      members: dept.members.map((member) =>
-        mergeMember(member, defaultMembers.get(member.id))
-      ),
-    })),
+    departments: dbTeam.departments.map((dept) => {
+      const fallback = defaultDepts.get(dept.id);
+      return {
+        ...dept,
+        visible: dept.visible ?? fallback?.visible ?? true,
+        members: dept.members.map((member) =>
+          mergeMember(member, defaultMembers.get(member.id))
+        ),
+      };
+    }),
   };
 }
 

@@ -5,11 +5,18 @@ import { siteConfig } from "@/data/site";
 interface LogoProps {
   showText?: boolean;
   size?: "sm" | "md";
+  variant?: "dark" | "light";
   onClick?: () => void;
 }
 
-export function Logo({ showText = true, size = "md", onClick }: LogoProps) {
+export function Logo({
+  showText = true,
+  size = "md",
+  variant = "dark",
+  onClick,
+}: LogoProps) {
   const iconSize = size === "sm" ? 36 : 44;
+  const isLight = variant === "light";
 
   return (
     <Link
@@ -27,10 +34,20 @@ export function Logo({ showText = true, size = "md", onClick }: LogoProps) {
       />
       {showText && (
         <div className="hidden md:block min-w-0 max-w-[200px] lg:max-w-none">
-          <p className="text-cream font-bold text-sm leading-snug group-hover:text-gold transition-colors">
+          <p
+            className={`font-bold text-sm leading-snug transition-colors ${
+              isLight
+                ? "text-black/85 group-hover:text-gold-dark"
+                : "text-cream group-hover:text-gold"
+            }`}
+          >
             {siteConfig.name}
           </p>
-          <p className="text-gold/60 text-xs leading-snug mt-0.5">
+          <p
+            className={`text-xs leading-snug mt-0.5 ${
+              isLight ? "text-black/55" : "text-gold/60"
+            }`}
+          >
             للمحاماة والاستشارات القانونية
           </p>
         </div>

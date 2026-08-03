@@ -38,13 +38,23 @@ export default function AdminTeamPage() {
     if (!team) return;
     setSaving(true);
     setMessage("");
+
+    const payload: TeamStructure = {
+      ...team,
+      departments: team.departments.map((dept) => ({
+        ...dept,
+        visible: dept.visible === false ? false : true,
+      })),
+    };
+
     const res = await fetch("/api/admin/team", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(team),
+      body: JSON.stringify(payload),
     });
     setSaving(false);
     setMessage(res.ok ? "تم الحفظ — حدّث الموقع للتأكد" : "فشل الحفظ");
+    if (res.ok) setTeam(payload);
   }
 
   function updateMember(

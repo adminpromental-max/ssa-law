@@ -41,6 +41,15 @@ function mergeMember(
   return merged;
 }
 
+function resolveDeptVisible(
+  dept: { visible?: boolean },
+  fallback?: { visible?: boolean }
+): boolean {
+  if (typeof dept.visible === "boolean") return dept.visible;
+  if (typeof fallback?.visible === "boolean") return fallback.visible;
+  return true;
+}
+
 function mergeTeamStructure(
   dbTeam: TeamStructure,
   defaults: TeamStructure
@@ -68,7 +77,7 @@ function mergeTeamStructure(
       const fallback = defaultDepts.get(dept.id);
       return {
         ...dept,
-        visible: dept.visible ?? fallback?.visible ?? true,
+        visible: resolveDeptVisible(dept, fallback),
         members: dept.members.map((member) =>
           mergeMember(member, defaultMembers.get(member.id))
         ),

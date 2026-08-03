@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/data/site";
 import { Button } from "@/components/ui/Button";
@@ -10,6 +11,10 @@ import { ContactQuickActions } from "@/components/ui/ContactQuickActions";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const isTransparent = isHome && !scrolled && !open;
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -18,20 +23,41 @@ export function Header() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!isHome) {
+      setScrolled(true);
+      return;
+    }
+
+    const onScroll = () => setScrolled(window.scrollY > 48);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isHome]);
+
+  const navLinkClass = isTransparent
+    ? "px-4 py-2 text-black/75 hover:text-gold-dark text-sm transition-colors"
+    : "px-4 py-2 text-cream/80 hover:text-gold text-sm transition-colors";
+
   return (
     <>
-      <header className="fixed top-0 right-0 left-0 z-50 bg-warm-950/95 md:backdrop-blur-md border-b border-gold/10">
+      <header
+        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
+          isTransparent
+            ? "bg-transparent border-b border-transparent shadow-none"
+            : "bg-warm-950/95 md:backdrop-blur-md border-b border-gold/10 shadow-sm"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
-            <Logo onClick={() => setOpen(false)} />
+            <Logo
+              onClick={() => setOpen(false)}
+              variant={isTransparent ? "light" : "dark"}
+            />
 
             <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="px-4 py-2 text-cream/80 hover:text-gold text-sm transition-colors"
-                >
+                <Link key={link.href} href={link.href} className={navLinkClass}>
                   {link.label}
                 </Link>
               ))}
@@ -49,7 +75,9 @@ export function Header() {
 
             <button
               onClick={() => setOpen(!open)}
-              className="lg:hidden text-cream p-2 -mr-2"
+              className={`lg:hidden p-2 -mr-2 ${
+                isTransparent ? "text-black/80" : "text-cream"
+              }`}
               aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
               aria-expanded={open}
             >

@@ -16,7 +16,7 @@ export function HeroNamePlate({ align = "center" }: HeroNamePlateProps) {
         width={1075}
         height={565}
         priority
-        className="w-full max-w-[240px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[400px] h-auto object-contain"
+        className="w-full max-w-[240px] sm:max-w-[300px] md:max-w-[360px] lg:max-w-[420px] xl:max-w-[460px] h-auto object-contain"
       />
     </h1>
   );

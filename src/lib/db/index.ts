@@ -43,6 +43,7 @@ function normalizeTeam(team: TeamStructure): TeamStructure {
     ...team,
     departments: team.departments.map((dept) => ({
       ...dept,
+      visible: dept.visible === false ? false : true,
       members: dept.members ?? [],
     })),
   };

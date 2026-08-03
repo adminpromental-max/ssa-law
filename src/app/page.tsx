@@ -50,17 +50,17 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative flex items-center justify-center section-hero-light overflow-hidden">
+      <section className="relative min-h-[calc(100dvh-4rem)] flex items-center section-hero-light overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-bl from-gold/8 via-transparent to-gold-muted/5" />
         <div className="absolute top-0 left-0 right-0 h-px bg-gold/20" />
         <div className="hidden md:block absolute bottom-10 left-10 w-64 h-64 bg-gold/8 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-6 sm:pb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="flex justify-center lg:justify-end order-1">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-10 sm:pb-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-6 xl:gap-10 items-center">
+            <div className="flex justify-center lg:justify-end lg:pe-4 xl:pe-10 order-1">
               <HeroNamePlate align="end" />
             </div>
 
-            <div className="order-2 text-center lg:text-start">
+            <div className="order-2 text-center lg:text-start lg:ps-4 xl:ps-10">
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3">
                 <div className="inline-flex items-center gap-2 bg-white/75 border border-gold/30 rounded-sm px-3 py-2 shadow-sm">
                   <Award className="w-3.5 h-3.5 text-gold-dark shrink-0" />

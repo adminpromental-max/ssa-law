@@ -16,6 +16,7 @@ interface StatsBannerProps {
   experienceYears: number;
   requestsCount: number;
   initialVisitors: number;
+  compact?: boolean;
 }
 
 const statItems: {
@@ -35,6 +36,7 @@ export function StatsBanner({
   experienceYears,
   requestsCount,
   initialVisitors,
+  compact = false,
 }: StatsBannerProps) {
   const [visitors, setVisitors] = useState(initialVisitors);
 
@@ -69,7 +71,11 @@ export function StatsBanner({
   };
 
   return (
-    <section className="banner-image-section relative overflow-hidden">
+    <section
+      className={`banner-image-section relative overflow-hidden shrink-0 ${
+        compact ? "min-h-0" : ""
+      }`}
+    >
       <Image
         src="/images/stats-bg.png"
         alt=""
@@ -80,17 +86,34 @@ export function StatsBanner({
       />
       <div className="banner-image-overlay banner-image-overlay-stats" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+      <div
+        className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${
+          compact ? "py-5 sm:py-6" : "py-8 sm:py-10"
+        }`}
+      >
+        <div
+          className={`grid grid-cols-2 lg:grid-cols-4 ${
+            compact ? "gap-4 sm:gap-6" : "gap-6 sm:gap-8"
+          }`}
+        >
           {statItems.map(({ key, label, icon: Icon }) => (
             <div
               key={key}
               className="flex flex-col items-center text-center px-2"
             >
-              <div className="banner-stat-icon mb-3">
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
+              <div className={`banner-stat-icon ${compact ? "mb-2" : "mb-3"}`}>
+                <Icon
+                  className={compact ? "w-4 h-4 sm:w-5 sm:h-5" : "w-5 h-5 sm:w-6 sm:h-6"}
+                  strokeWidth={1.5}
+                />
               </div>
-              <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 tabular-nums leading-none">
+              <p
+                className={`font-bold text-white mb-1 sm:mb-2 tabular-nums leading-none ${
+                  compact
+                    ? "text-2xl sm:text-3xl lg:text-4xl"
+                    : "text-3xl sm:text-4xl md:text-5xl"
+                }`}
+              >
                 <AnimatedCounter value={values[key]} className="text-white" />
               </p>
               <p className="text-white/75 text-xs sm:text-sm leading-snug">

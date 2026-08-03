@@ -50,51 +50,54 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative min-h-[calc(100dvh-4rem)] flex items-center section-hero-light overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-bl from-gold/8 via-transparent to-gold-muted/5" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gold/20" />
-        <div className="hidden md:block absolute bottom-10 left-10 w-64 h-64 bg-gold/8 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-10 sm:pb-14">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-6 xl:gap-10 items-center">
-            <div className="flex justify-center lg:justify-end lg:pe-4 xl:pe-10 order-1">
-              <HeroNamePlate align="end" />
-            </div>
-
-            <div className="order-2 text-center lg:text-start lg:ps-4 xl:ps-10">
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3">
-                <div className="inline-flex items-center gap-2 bg-white/75 border border-gold/30 rounded-sm px-3 py-2 shadow-sm">
-                  <Award className="w-3.5 h-3.5 text-gold-dark shrink-0" />
-                  <span className="text-gold-dark text-xs font-medium whitespace-nowrap">
-                    ترخيص {site.license}
-                  </span>
-                </div>
-                <div className="inline-flex items-center gap-2 bg-white/75 border border-gold/30 rounded-sm px-3 py-2 shadow-sm">
-                  <span className="text-gold-dark text-xs font-medium whitespace-nowrap">
-                    تأسس منذ عام {formatFoundedYearDisplay(site.foundedYear)}
-                  </span>
-                </div>
+      <div className="min-h-[100dvh] flex flex-col">
+        <section className="relative flex-1 flex items-center section-hero-light overflow-hidden min-h-0">
+          <div className="absolute inset-0 bg-gradient-to-bl from-gold/8 via-transparent to-gold-muted/5" />
+          <div className="absolute top-0 left-0 right-0 h-px bg-gold/20" />
+          <div className="hidden md:block absolute bottom-10 left-10 w-64 h-64 bg-gold/8 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-4 sm:pb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-4 xl:gap-8 items-center">
+              <div className="flex justify-center lg:justify-end lg:pe-2 xl:pe-8 order-1">
+                <HeroNamePlate align="end" compact />
               </div>
 
-              <p className="text-black/70 text-sm sm:text-base leading-relaxed mt-4 sm:mt-5 max-w-lg mx-auto lg:mx-0">
-                {homepage.heroDescription}
-              </p>
+              <div className="order-2 text-center lg:text-start lg:ps-2 xl:ps-8">
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
+                  <div className="inline-flex items-center gap-2 bg-white/75 border border-gold/30 rounded-sm px-3 py-1.5 shadow-sm">
+                    <Award className="w-3.5 h-3.5 text-gold-dark shrink-0" />
+                    <span className="text-gold-dark text-xs font-medium whitespace-nowrap">
+                      ترخيص {site.license}
+                    </span>
+                  </div>
+                  <div className="inline-flex items-center gap-2 bg-white/75 border border-gold/30 rounded-sm px-3 py-1.5 shadow-sm">
+                    <span className="text-gold-dark text-xs font-medium whitespace-nowrap">
+                      تأسس منذ عام {formatFoundedYearDisplay(site.foundedYear)}
+                    </span>
+                  </div>
+                </div>
+
+                <p className="text-black/70 text-sm leading-relaxed mt-3 sm:mt-4 max-w-lg mx-auto lg:mx-0 line-clamp-3 lg:line-clamp-4">
+                  {homepage.heroDescription}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-center mt-4 sm:mt-5">
+              <Button href="/services" size="lg" className="w-full max-w-xs sm:max-w-sm px-8">
+                خدماتنا
+              </Button>
             </div>
           </div>
+        </section>
 
-          <div className="flex justify-center mt-6 sm:mt-8">
-            <Button href="/services" size="lg" className="w-full max-w-xs sm:max-w-sm px-8">
-              خدماتنا
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <StatsBanner
-        casesBase={stats.casesBase}
-        experienceYears={getOfficeExperienceYears()}
-        requestsCount={stats.requestsCount}
-        initialVisitors={visitorCount}
-      />
+        <StatsBanner
+          casesBase={stats.casesBase}
+          experienceYears={getOfficeExperienceYears()}
+          requestsCount={stats.requestsCount}
+          initialVisitors={visitorCount}
+          compact
+        />
+      </div>
 
       <section className="py-16 sm:py-24 section-deep">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
